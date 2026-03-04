@@ -30,13 +30,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(
-        backgroundColor: AppColors.backgroundPrimary,
-        body: DashboardSkeleton(),
+      return Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: const DashboardSkeleton(),
       );
     }
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.lg),
@@ -55,14 +56,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           'Welcome to VERD',
                           style: AppTypography.h2.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
+                            color: theme.colorScheme.onSurface,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           'Your smart agricultural companion',
                           style: AppTypography.bodySmall.copyWith(
-                            color: AppColors.gray600,
+                            color: theme.colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -94,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 'Quick Actions',
                 style: AppTypography.h3.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
@@ -193,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 'Popular Topics',
                 style: AppTypography.h3.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
@@ -258,12 +259,13 @@ class _HomeScreenState extends State<HomeScreen> {
     required String subtitle,
     VoidCallback? onTap,
   }) {
+    final theme = Theme.of(context);
     return BouncingCard(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: AppSpacing.md),
         decoration: BoxDecoration(
-          color: AppColors.backgroundSecondary,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -301,14 +303,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         title,
                         style: AppTypography.bodyLarge.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         subtitle,
                         style: AppTypography.bodySmall.copyWith(
-                          color: AppColors.gray600,
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -332,11 +334,12 @@ class _HomeScreenState extends State<HomeScreen> {
     required String subtitle,
     VoidCallback? onTap,
   }) {
+    final theme = Theme.of(context);
     return BouncingCard(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.backgroundSecondary,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -371,7 +374,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   title,
                   style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                    color: theme.colorScheme.onSurface,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -379,7 +382,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   subtitle,
                   style: AppTypography.bodySmall.copyWith(
-                    color: AppColors.gray600,
+                    color: theme.colorScheme.onSurfaceVariant,
                     fontSize: 11,
                   ),
                   textAlign: TextAlign.center,

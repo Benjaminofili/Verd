@@ -149,7 +149,7 @@ class AppTextField extends StatefulWidget {
       focusNode: focusNode,
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.search,
-      prefixIcon: const Icon(Icons.search_outlined, size: 20, color: AppColors.gray500),
+      prefixIcon: const Icon(Icons.search_outlined, size: 20),
       onChanged: onChanged,
       onSubmitted: onSubmitted,
     );
@@ -164,10 +164,11 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     // Responsive font size — capped to avoid layout overflow
     final scaleFactor = MediaQuery.textScalerOf(context).scale(1.0).clamp(0.8, 1.3);
     final bodyStyle = AppTypography.body.copyWith(
-      color: widget.enabled ? AppColors.textPrimary : AppColors.textDisabled,
+      color: widget.enabled ? theme.colorScheme.onSurface : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
       fontSize: (AppTypography.base) * scaleFactor,
     );
 
@@ -177,7 +178,7 @@ class _AppTextFieldState extends State<AppTextField> {
         _obscure
             ? Icons.visibility_outlined
             : Icons.visibility_off_outlined,
-        color: AppColors.gray500,
+        color: theme.colorScheme.onSurfaceVariant,
         size: 20,
       ),
       onPressed: () => setState(() => _obscure = !_obscure),
@@ -195,7 +196,7 @@ class _AppTextFieldState extends State<AppTextField> {
           Text(
             widget.label!,
             style: AppTypography.body.copyWith(
-              color: AppColors.textPrimary,
+              color: theme.colorScheme.onSurface,
               fontWeight: AppTypography.medium,
               fontSize: AppTypography.base * scaleFactor,
             ),
@@ -233,8 +234,8 @@ class _AppTextFieldState extends State<AppTextField> {
             counterText: '', // hide character counter clutter
             filled: true,
             fillColor: widget.enabled
-                ? AppColors.backgroundSecondary
-                : AppColors.gray100,
+                ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
+                : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.1),
             // isDense makes the field shorter on small screens
             isDense: true,
             contentPadding: EdgeInsets.symmetric(

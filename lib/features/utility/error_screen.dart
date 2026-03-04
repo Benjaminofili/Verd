@@ -150,20 +150,21 @@ class _ErrorScreenState extends State<ErrorScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final sw = MediaQuery.sizeOf(context).width;
     final scaleFactor =
     MediaQuery.textScalerOf(context).scale(1.0).clamp(0.8, 1.3);
     final iconSize = (sw * 0.25).clamp(80.0, 110.0);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundPrimary,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
         leading: Navigator.canPop(context)
             ? IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new,
-              size: 18, color: AppColors.textPrimary),
+          icon: Icon(Icons.arrow_back_ios_new,
+              size: 18, color: theme.colorScheme.onSurface),
           onPressed: () => Navigator.of(context).pop(),
         )
             : null,
@@ -214,7 +215,7 @@ class _ErrorScreenState extends State<ErrorScreen>
                     Text(
                       widget.message,
                       style: AppTypography.body.copyWith(
-                        color: AppColors.textSecondary,
+                        color: theme.colorScheme.onSurfaceVariant,
                         fontSize: AppTypography.base * scaleFactor,
                       ),
                       textAlign: TextAlign.center,
@@ -260,7 +261,7 @@ class _ErrorScreenState extends State<ErrorScreen>
                         child: OutlinedButton(
                           onPressed: widget.onSecondary,
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: AppColors.textPrimary,
+                            foregroundColor: theme.colorScheme.onSurface,
                             padding:
                             const EdgeInsets.symmetric(vertical: 14),
                             side: const BorderSide(
@@ -272,7 +273,7 @@ class _ErrorScreenState extends State<ErrorScreen>
                           child: Text(
                             widget.secondaryLabel!,
                             style: AppTypography.button
-                                .copyWith(color: AppColors.textPrimary),
+                                .copyWith(color: theme.colorScheme.onSurface),
                           ),
                         ),
                       ),

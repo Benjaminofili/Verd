@@ -1,20 +1,26 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_assets.dart';
 import 'package:verd/core/constants/app_theme.dart';
+import 'package:verd/data/services/firebase_auth_service.dart';
+import 'package:verd/providers/auth_provider.dart';
 import 'package:verd/shared/widgets/app_button.dart';
 import 'package:verd/shared/widgets/app_text_field.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
+class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  ConsumerState<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   final _emailController = TextEditingController();
+  bool _isLoading = false;
+  bool _emailSent = false;
 
   @override
   void dispose() {
@@ -22,10 +28,52 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     super.dispose();
   }
 
-  void _onResetPassword() {
-    // TODO: Implement actual password reset logic
-    // Usually shows a success toast and then pops
-    context.pop();
+  Future<void> _onResetPassword() async {
+    if (_isLoading) return;
+
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      _showError('Please enter your email address.');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      await ref.read(authNotifierProvider.notifier).resetPassword(email);
+      if (mounted) {
+        setState(() => _emailSent = true);
+        _showSuccess('Password reset email sent! Check your inbox.');
+      }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) _showError(FirebaseAuthService.friendlyErrorMessage(e.code));
+    } catch (e) {
+      if (mounted) _showError('An unexpected error occurred. Please try again.');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.redAccent,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+  }
+
+  void _showSuccess(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
   }
 
   @override
@@ -82,9 +130,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: Text(
-                  "No worries! Enter your email and we'll send you reset instructions",
+                  _emailSent
+                      ? "We've sent a password reset link to your email. Check your inbox and follow the instructions."
+                      : "No worries! Enter your email and we'll send you reset instructions",
                   style: AppTypography.body.copyWith(
-                    color: AppColors.gray600,
+                    color: _emailSent ? Colors.green.shade700 : AppColors.gray600,
                     height: 1.4,
                   ),
                   textAlign: TextAlign.center,
@@ -93,37 +143,53 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               const SizedBox(height: 40),
 
               // ── Form ──
-              AppTextField.email(
-                controller: _emailController,
-              ),
-              const SizedBox(height: 32),
+              if (!_emailSent) ...[
+                AppTextField.email(
+                  controller: _emailController,
+                ),
+                const SizedBox(height: 32),
 
-              // ── Reset Button ──
-              AppButton(
-                text: 'RESET PASSWORD',
-                onPressed: _onResetPassword,
-              ),
+                // ── Reset Button ──
+                AppButton(
+                  text: _isLoading ? 'SENDING...' : 'RESET PASSWORD',
+                  onPressed: _isLoading ? null : _onResetPassword,
+                  isLoading: _isLoading,
+                ),
+              ] else ...[
+                // ── Success State — show return to login ──
+                const Icon(
+                  Icons.mark_email_read_outlined,
+                  size: 64,
+                  color: Colors.green,
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                AppButton(
+                  text: 'BACK TO LOGIN',
+                  onPressed: () => context.pop(),
+                ),
+              ],
               const SizedBox(height: 32),
 
               // ── Back to Login Link ──
-              Center(
-                child: TextButton(
-                  onPressed: () => context.pop(),
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: AppSpacing.md,
-                      horizontal: AppSpacing.xl,
+              if (!_emailSent)
+                Center(
+                  child: TextButton(
+                    onPressed: () => context.pop(),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.md,
+                        horizontal: AppSpacing.xl,
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    'Back to Login',
-                    style: AppTypography.body.copyWith(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w500,
+                    child: Text(
+                      'Back to Login',
+                      style: AppTypography.body.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

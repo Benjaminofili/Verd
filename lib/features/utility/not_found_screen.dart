@@ -72,6 +72,7 @@ class _NotFoundScreenState extends State<NotFoundScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final sw = MediaQuery.sizeOf(context).width;
     final scaleFactor =
     MediaQuery.textScalerOf(context).scale(1.0).clamp(0.8, 1.3);
@@ -79,14 +80,14 @@ class _NotFoundScreenState extends State<NotFoundScreen>
     final label = widget.itemName ?? 'page';
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundPrimary,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
         leading: (widget.onGoBack != null || Navigator.canPop(context))
             ? IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new,
-              size: 18, color: AppColors.textPrimary),
+          icon: Icon(Icons.arrow_back_ios_new,
+              size: 18, color: theme.colorScheme.onSurface),
           onPressed: widget.onGoBack ??
                   () => Navigator.of(context).pop(),
         )
@@ -161,7 +162,7 @@ class _NotFoundScreenState extends State<NotFoundScreen>
                     Text(
                       'The $label you\'re looking for may have been\ndeleted or the link may be incorrect.',
                       style: AppTypography.body.copyWith(
-                        color: AppColors.textSecondary,
+                        color: theme.colorScheme.onSurfaceVariant,
                         fontSize: AppTypography.base * scaleFactor,
                       ),
                       textAlign: TextAlign.center,
@@ -201,7 +202,7 @@ class _NotFoundScreenState extends State<NotFoundScreen>
                         onPressed: widget.onGoBack ??
                                 () => Navigator.of(context).pop(),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.textPrimary,
+                          foregroundColor: theme.colorScheme.onSurface,
                           padding:
                           const EdgeInsets.symmetric(vertical: 14),
                           side: const BorderSide(
@@ -213,7 +214,7 @@ class _NotFoundScreenState extends State<NotFoundScreen>
                         child: Text(
                           'Go Back',
                           style: AppTypography.button
-                              .copyWith(color: AppColors.textPrimary),
+                              .copyWith(color: theme.colorScheme.onSurface),
                         ),
                       ),
                     ),
@@ -337,10 +338,11 @@ class SkipButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fallback = Theme.of(context).colorScheme.onSurfaceVariant;
     return TextButton(
       onPressed: onSkip,
       style: TextButton.styleFrom(
-        foregroundColor: color ?? AppColors.textSecondary,
+        foregroundColor: color ?? fallback,
         padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
         minimumSize: const Size(44, 44),
@@ -349,7 +351,7 @@ class SkipButton extends StatelessWidget {
       child: Text(
         label,
         style: AppTypography.body.copyWith(
-          color: color ?? AppColors.textSecondary,
+          color: color ?? fallback,
           fontWeight: AppTypography.medium,
         ),
       ),

@@ -1,0 +1,6 @@
+make widget support dark theme 
+in the history screen the filter features is not working at all same as dark mode 
+Article screen dark mode
+gallery screen dark mode
+edit profile modal needs work on dark mode 
+the profile screen need a redesign 

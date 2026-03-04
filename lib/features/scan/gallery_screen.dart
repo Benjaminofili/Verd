@@ -44,9 +44,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
         leadingWidth: 80,
         leading: Padding(
@@ -56,11 +57,11 @@ class _GalleryScreenState extends State<GalleryScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: theme.colorScheme.surface,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
+                    color: theme.colorScheme.shadow.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -68,7 +69,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
-                icon: const Icon(Icons.chevron_left, color: AppColors.textPrimary),
+                icon: Icon(Icons.chevron_left, color: theme.colorScheme.onSurface),
                 onPressed: () {
                   if (context.canPop()) {
                     context.pop();
@@ -80,7 +81,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
         ),
         title: Text(
           'Gallery',
-          style: AppTypography.h3.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.bold),
+          style: AppTypography.h3.copyWith(color: theme.colorScheme.onSurface, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -136,7 +137,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
         gradientColors = [const Color(0xFFAB47BC), const Color(0xFF6A1B9A)];
         break;
       default:
-        gradientColors = [AppColors.gray400, AppColors.gray600];
+        gradientColors = [Colors.grey.shade400, Colors.grey.shade600];
     }
 
     return Container(

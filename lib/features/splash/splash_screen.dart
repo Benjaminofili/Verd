@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -41,10 +42,17 @@ class _SplashScreenState extends State<SplashScreen>
       vsync: this,
     )..repeat();
 
-    // Navigate after splash duration
+    // Navigate after splash duration — check auth state
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        context.go('/onboarding');
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          // User is already logged in — go straight to home
+          context.go('/home');
+        } else {
+          // Not logged in — show onboarding
+          context.go('/onboarding');
+        }
       }
     });
   }

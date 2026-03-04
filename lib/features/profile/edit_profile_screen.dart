@@ -38,37 +38,38 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         leadingWidth: 80,
         leading: TextButton(
           onPressed: _handleCancel,
           child: Text(
             'Cancel',
-            style: AppTypography.buttonSmall.copyWith(color: AppColors.primary),
+            style: AppTypography.buttonSmall.copyWith(color: theme.colorScheme.primary),
           ),
         ),
         title: Text(
           'Edit Profile',
-          style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
+          style: AppTypography.h4.copyWith(color: theme.colorScheme.onSurface),
         ),
         centerTitle: true,
         actions: [
           _isSaving 
-            ? const Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: SizedBox(
                   width: 20,
                   height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
+                  child: CircularProgressIndicator(strokeWidth: 2, color: theme.colorScheme.primary),
                 ),
               )
             : TextButton(
                 onPressed: _handleSave,
             child: Text(
               'Save',
-              style: AppTypography.buttonSmall.copyWith(color: AppColors.primary),
+              style: AppTypography.buttonSmall.copyWith(color: theme.colorScheme.primary),
             ),
           ),
           const SizedBox(width: AppSpacing.sm),

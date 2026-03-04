@@ -4,7 +4,6 @@ import 'package:verd/core/constants/app_theme.dart';
 import 'package:verd/shared/widgets/app_card.dart';
 import 'package:verd/shared/widgets/skeleton_loader.dart';
 import 'package:verd/shared/widgets/empty_state.dart';
-import 'package:verd/shared/widgets/error_view.dart';
 
 class ScanHistoryScreen extends StatefulWidget {
   const ScanHistoryScreen({super.key});
@@ -15,9 +14,18 @@ class ScanHistoryScreen extends StatefulWidget {
 
 class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
   bool _isLoading = true;
-  String _selectedFilter = 'All (6)';
+  String _selectedFilter = 'All';
 
-  final List<String> _filters = ['All (6)', 'Healthy', 'Diseased'];
+  final List<String> _filters = ['All', 'Healthy', 'Diseased'];
+
+  List<Map<String, dynamic>> get _filteredItems {
+    if (_selectedFilter == 'Healthy') {
+      return _historyItems.where((item) => item['status'] == 'Healthy').toList();
+    } else if (_selectedFilter == 'Diseased') {
+      return _historyItems.where((item) => item['status'] != 'Healthy').toList();
+    }
+    return _historyItems;
+  }
 
   final List<Map<String, dynamic>> _historyItems = [
     {
@@ -68,8 +76,10 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
         leadingWidth: 80,
         leading: Padding(
@@ -79,11 +89,11 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: theme.colorScheme.surface,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
+                    color: theme.colorScheme.shadow.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -91,7 +101,7 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
-                icon: const Icon(Icons.chevron_left, color: AppColors.textPrimary),
+                icon: Icon(Icons.chevron_left, color: theme.colorScheme.onSurface),
                 onPressed: () {
                   if (context.canPop()) {
                     context.pop();
@@ -103,7 +113,7 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
         ),
         title: Text(
           'Scan History',
-          style: AppTypography.h3.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.bold),
+          style: AppTypography.h3.copyWith(color: theme.colorScheme.onSurface, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
@@ -114,11 +124,11 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: theme.colorScheme.surface,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
+                      color: theme.colorScheme.shadow.withValues(alpha: 0.05),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -126,7 +136,7 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                 ),
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  icon: const Icon(Icons.filter_alt_outlined, color: AppColors.textPrimary),
+                  icon: Icon(Icons.filter_alt_outlined, color: theme.colorScheme.onSurface),
                   onPressed: () {
                     // Filter logic
                   },
@@ -159,12 +169,12 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                       duration: const Duration(milliseconds: 200),
                       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.md),
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF4CAF50) : AppColors.backgroundSecondary,
+                        color: isSelected ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           if (!isSelected)
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.05),
+                              color: theme.colorScheme.shadow.withValues(alpha: 0.05),
                               blurRadius: 5,
                               offset: const Offset(0, 2),
                             ),
@@ -173,7 +183,7 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                       child: Text(
                         filter,
                         style: AppTypography.bodySmall.copyWith(
-                          color: isSelected ? Colors.white : AppColors.textPrimary,
+                          color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurfaceVariant,
                           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                         ),
                       ),
@@ -188,16 +198,16 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
           Expanded(
             child: _isLoading
                 ? const ScanListSkeleton()
-                : _historyItems.isEmpty
+                : _filteredItems.isEmpty
                     ? EmptyState.noScans()
                     : ListView.builder(
                         padding: const EdgeInsets.fromLTRB(AppSpacing.xl, 0, AppSpacing.xl, AppSpacing.xxxl),
-                        itemCount: _historyItems.length,
+                        itemCount: _filteredItems.length,
                         itemBuilder: (context, index) {
-                          final item = _historyItems[index];
+                          final item = _filteredItems[index];
                           return Padding(
                             padding: const EdgeInsets.only(bottom: AppSpacing.md),
-                            child: _buildHistoryCard(item),
+                            child: _buildHistoryCard(context, item),
                           );
                         },
                       ),
@@ -207,7 +217,8 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
     );
   }
 
-  Widget _buildHistoryCard(Map<String, dynamic> item) {
+  Widget _buildHistoryCard(BuildContext context, Map<String, dynamic> item) {
+    final theme = Theme.of(context);
     Color iconBackgroundColor;
     IconData iconData;
     Color statusColor;
@@ -234,9 +245,9 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
         statusColor = const Color(0xFFE53935);
         break;
       default:
-        iconBackgroundColor = AppColors.gray400;
+        iconBackgroundColor = theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5);
         iconData = Icons.info_outline;
-        statusColor = AppColors.gray400;
+        statusColor = theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5);
     }
 
     return AppCard(
@@ -270,7 +281,7 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                         item['title'],
                         style: AppTypography.bodyLarge.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -294,7 +305,7 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                 Text(
                   item['subtitle'],
                   style: AppTypography.bodySmall.copyWith(
-                    color: AppColors.gray600,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -304,12 +315,12 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
                     Text(
                       item['date'],
                       style: AppTypography.caption.copyWith(
-                        color: AppColors.gray500,
+                        color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
                       ),
                     ),
-                    const Icon(
+                    Icon(
                       Icons.chevron_right,
-                      color: AppColors.gray400,
+                      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                       size: 20,
                     ),
                   ],

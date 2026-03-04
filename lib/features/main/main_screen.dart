@@ -36,8 +36,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: ConnectivityBanner(
         child: IndexedStack(
           index: _currentIndex,
@@ -48,7 +49,7 @@ class _MainScreenState extends State<MainScreen> {
         bottom: true,
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.backgroundSecondary,
+            color: theme.colorScheme.surface,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(32),
               topRight: Radius.circular(32),

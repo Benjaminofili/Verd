@@ -9,8 +9,9 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         leadingWidth: 80,
         leading: TextButton(
@@ -61,14 +62,14 @@ class AboutScreen extends StatelessWidget {
               'VERD',
               style: AppTypography.h1.copyWith(
                 fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(
               'Version 1.0.0',
               style: AppTypography.bodySmall.copyWith(
-                color: AppColors.gray600,
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: AppSpacing.huge),
@@ -84,14 +85,14 @@ class AboutScreen extends StatelessWidget {
                     'Our Mission',
                     style: AppTypography.h3.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.md),
                   Text(
                     'VERD is dedicated to empowering farmers and agricultural professionals with cutting-edge AI technology to identify crop diseases early and improve crop yields. Our mission is to make agricultural expertise accessible to everyone.',
                     style: AppTypography.body.copyWith(
-                      color: AppColors.gray600,
+                      color: theme.colorScheme.onSurfaceVariant,
                       height: 1.5,
                     ),
                   ),
@@ -111,14 +112,14 @@ class AboutScreen extends StatelessWidget {
                     'Features',
                     style: AppTypography.h3.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.md),
-                  _buildFeatureItem('AI-powered crop disease detection'),
-                  _buildFeatureItem('Comprehensive learning resources'),
-                  _buildFeatureItem('Offline mode for remote areas'),
-                  _buildFeatureItem('History tracking and analytics'),
+                  _buildFeatureItem(context, 'AI-powered crop disease detection'),
+                  _buildFeatureItem(context, 'Comprehensive learning resources'),
+                  _buildFeatureItem(context, 'Offline mode for remote areas'),
+                  _buildFeatureItem(context, 'History tracking and analytics'),
                 ],
               ),
             ),
@@ -142,7 +143,7 @@ class AboutScreen extends StatelessWidget {
                     'Terms of Service',
                     style: AppTypography.bodyLarge.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                   const Icon(
@@ -159,7 +160,8 @@ class AboutScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureItem(String text) {
+  Widget _buildFeatureItem(BuildContext context, String text) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
       child: Row(
@@ -175,7 +177,7 @@ class AboutScreen extends StatelessWidget {
             child: Text(
               text,
               style: AppTypography.body.copyWith(
-                color: AppColors.gray600,
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ),

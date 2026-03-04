@@ -27,8 +27,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         leadingWidth: 80,
         leading: TextButton(
@@ -42,7 +43,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
         ),
         title: Text(
           'Language',
-          style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
+          style: AppTypography.h4.copyWith(color: theme.colorScheme.onSurface),
         ),
         centerTitle: true,
         actions: [
@@ -61,7 +62,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
         ],
       ),
       body: Container(
-        color: AppColors.backgroundSecondary,
+        color: theme.colorScheme.surface,
         child: ListView.separated(
           itemCount: _languages.length,
           separatorBuilder: (context, index) => const Divider(
@@ -94,14 +95,14 @@ class _LanguageScreenState extends State<LanguageScreen> {
                           language['name']!,
                           style: AppTypography.bodyLarge.copyWith(
                             fontWeight: AppTypography.medium,
-                            color: AppColors.textPrimary,
+                            color: theme.colorScheme.onSurface,
                           ),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           language['nativeName']!,
                           style: AppTypography.bodySmall.copyWith(
-                            color: AppColors.textSecondary,
+                            color: theme.colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],

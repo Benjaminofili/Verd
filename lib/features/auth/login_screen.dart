@@ -1,21 +1,27 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_assets.dart';
 import 'package:verd/core/constants/app_theme.dart';
+import 'package:verd/data/services/firebase_auth_service.dart';
+import 'package:verd/providers/auth_provider.dart';
 import 'package:verd/shared/widgets/app_button.dart';
 import 'package:verd/shared/widgets/app_text_field.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isLoading = false;
+  bool _isGoogleLoading = false;
 
   @override
   void dispose() {
@@ -24,9 +30,91 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _onLogin() {
-    // TODO: Implement actual login logic
-    context.go('/home');
+  Future<void> _onLogin() async {
+    if (_isLoading || _isGoogleLoading) return;
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      _showError('Please fill in all fields.');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      await ref.read(authNotifierProvider.notifier).login(email, password);
+      if (mounted) context.go('/home');
+    } on FirebaseAuthException catch (e) {
+      if (mounted) _showError(FirebaseAuthService.friendlyErrorMessage(e.code));
+    } catch (e) {
+      if (mounted) _showError('An unexpected error occurred. Please try again.');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _onGoogleSignIn() async {
+    if (_isLoading || _isGoogleLoading) return;
+    setState(() => _isGoogleLoading = true);
+
+    try {
+      final user = await ref.read(authRepositoryProvider).signInWithGoogle();
+      if (user != null && mounted) {
+        // Refresh the provider state to show the new user
+        ref.invalidate(authStateProvider);
+        context.go('/home');
+      }
+    } on FirebaseAuthException catch (e) {
+      print('🔥 FirebaseAuthException during Google Sign-In: ${e.code} - ${e.message}');
+      if (mounted) _showError(FirebaseAuthService.friendlyErrorMessage(e.code));
+    } catch (e, st) {
+      print('🔥 Exact Google Sign-In Exception: $e');
+      print('🔥 Stacktrace: $st');
+      if (mounted) _showError('Google Sign-In failed: $e');
+    } finally {
+      if (mounted) setState(() => _isGoogleLoading = false);
+    }
+  }
+
+  Future<void> _onSendEmailLink() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      _showError('Please enter your email to receive a sign-in link.');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    try {
+      await ref.read(authRepositoryProvider).sendSignInLink(email);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Sign-in link sent to $email! Check your inbox.'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) _showError(FirebaseAuthService.friendlyErrorMessage(e.code));
+    } catch (e) {
+      if (mounted) _showError('Failed to send link. Please try again.');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.redAccent,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
   }
 
   @override
@@ -41,14 +129,9 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // ── Logo ──
-                SvgPicture.asset(
-                  AppAssets.logoSvg,
-                  height: 64,
-                ),
+                SvgPicture.asset(AppAssets.logoSvg, height: 64),
                 const SizedBox(height: AppSpacing.xl),
 
-                // ── Title & Subtitle ──
                 Text(
                   'Welcome Back!',
                   style: AppTypography.h2.copyWith(
@@ -67,10 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: AppSpacing.xxxl),
 
-                // ── Login Form ──
-                AppTextField.email(
-                  controller: _emailController,
-                ),
+                AppTextField.email(controller: _emailController),
                 const SizedBox(height: AppSpacing.lg),
                 AppTextField.password(
                   controller: _passwordController,
@@ -78,38 +158,71 @@ class _LoginScreenState extends State<LoginScreen> {
                   onSubmitted: (_) => _onLogin(),
                 ),
 
-                // ── Forgot Password ──
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () => context.push('/forgot-password'),
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: AppSpacing.md,
-                        horizontal: AppSpacing.xs,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: _onSendEmailLink,
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    child: Text(
-                      'Forgot Password?',
-                      style: AppTypography.bodySmall.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w500,
+                      child: Text(
+                        'Email me a link',
+                        style: AppTypography.bodySmall.copyWith(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
+                    TextButton(
+                      onPressed: () => context.push('/forgot-password'),
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: Text(
+                        'Forgot Password?',
+                        style: AppTypography.bodySmall.copyWith(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: AppSpacing.xl),
 
-                // ── Login Button ──
                 AppButton(
-                  text: 'LOGIN',
-                  onPressed: _onLogin,
+                  text: _isLoading ? 'LOGGING IN...' : 'LOGIN WITH PASSWORD',
+                  onPressed: _isLoading || _isGoogleLoading ? null : _onLogin,
+                  isLoading: _isLoading,
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                
+                // ── OR Divider ──
+                Row(
+                  children: [
+                    const Expanded(child: Divider(color: AppColors.gray200, thickness: 1)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                      child: Text('OR', style: AppTypography.bodySmall.copyWith(color: AppColors.gray500, fontWeight: FontWeight.bold)),
+                    ),
+                    const Expanded(child: Divider(color: AppColors.gray200, thickness: 1)),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.lg),
+
+                // ── Google Sign In Button ──
+                AppButton(
+                  text: _isGoogleLoading ? 'PLEASE WAIT...' : 'SIGN IN WITH GOOGLE',
+                  onPressed: _isLoading || _isGoogleLoading ? null : _onGoogleSignIn,
+                  isLoading: _isGoogleLoading,
+                  variant: AppButtonVariant.outlined,
+                  icon: const Icon(Icons.g_mobiledata, size: 32),
                 ),
                 const SizedBox(height: AppSpacing.xxl),
 
-                // ── Sign Up Prompt ──
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

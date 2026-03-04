@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_theme.dart';
 import 'package:verd/core/constants/app_assets.dart';
-import 'package:verd/shared/widgets/app_card.dart';
 import 'package:verd/shared/widgets/bouncing_card.dart';
 
 class LearningCenterScreen extends StatelessWidget {

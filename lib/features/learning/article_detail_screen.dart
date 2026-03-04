@@ -11,18 +11,19 @@ class ArticleDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     // Simulated content based on ID
     final title = _getTitle(articleId);
     final icon = _getIcon(articleId);
     final color = _getColor(articleId);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.colorScheme.surface,
       body: CustomScrollView(
         slivers: [
           _buildSliverAppBar(context, title, icon, color),
           SliverToBoxAdapter(
-            child: _buildAudioPlayer(),
+            child: _buildAudioPlayer(context),
           ),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.lg),
@@ -136,20 +137,21 @@ class ArticleDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAudioPlayer() {
+  Widget _buildAudioPlayer(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.xl, AppSpacing.xl, 0),
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
       decoration: BoxDecoration(
-        color: AppColors.backgroundSecondary,
+        color: theme.colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(100),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.5), width: 2),
+        border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.5), width: 2),
       ),
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: AppColors.primary,
-            child: const Icon(Icons.play_arrow, color: Colors.white),
+            backgroundColor: theme.colorScheme.primary,
+            child: Icon(Icons.play_arrow, color: theme.colorScheme.onPrimary),
           ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
@@ -157,7 +159,7 @@ class ArticleDetailScreen extends StatelessWidget {
               'Listen to this guide (Audio)',
               style: AppTypography.bodyLarge.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: theme.colorScheme.onSurface,
               ),
             ),
           ),
@@ -173,6 +175,7 @@ class ArticleDetailScreen extends StatelessWidget {
     required IconData icon,
     bool isAlert = false,
   }) {
+    final theme = Theme.of(context);
     return AppCard(
       variant: AppCardVariant.elevated,
       padding: const EdgeInsets.all(AppSpacing.xl),
@@ -184,7 +187,7 @@ class ArticleDetailScreen extends StatelessWidget {
               Icon(
                 icon,
                 size: 32,
-                color: isAlert ? Colors.red : AppColors.primary,
+                color: isAlert ? theme.colorScheme.error : theme.colorScheme.primary,
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
@@ -192,7 +195,7 @@ class ArticleDetailScreen extends StatelessWidget {
                   title,
                   style: AppTypography.h3.copyWith(
                     fontWeight: FontWeight.w800,
-                    color: isAlert ? Colors.red : AppColors.textPrimary,
+                    color: isAlert ? theme.colorScheme.error : theme.colorScheme.onSurface,
                   ),
                 ),
               ),
@@ -203,7 +206,7 @@ class ArticleDetailScreen extends StatelessWidget {
             content,
             style: AppTypography.bodyLarge.copyWith(
               height: 1.5,
-              color: AppColors.textPrimary,
+              color: theme.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w500, // Makes it easier to read
             ),
           ),
@@ -261,7 +264,7 @@ class ArticleDetailScreen extends StatelessWidget {
       case 'featured':
         return const Color(0xFF9C27B0);
       default:
-        return AppColors.primary;
+        return const Color(0xFF4CAF50); // Fallback color
     }
   }
 }

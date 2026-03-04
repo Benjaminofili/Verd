@@ -49,6 +49,8 @@ dependencies:
   package_info_plus: ^9.0.0         # App version for about screen
   permission_handler: ^12.0.1       # Handle runtime permissions
   shared_preferences: ^2.5.4        # Local storage for settings
+  uuid: ^4.5.1                       # Generate unique IDs for scans
+  google_sign_in: ^6.2.1              # Google Sign-In
 
   # ===== Optional (add as needed) =====
   # Camera & gallery
@@ -65,15 +67,17 @@ dependencies:
 
   # Networking (if using Firebase or REST)
   dio: ^5.9.2                          # HTTP client
-  firebase_core: ^3.4.0                # Firebase core (if using Firebase)
-  firebase_auth: ^5.2.0                # Firebase auth
-  cloud_firestore: ^5.4.0              # Firestore database
+  firebase_core: ^3.6.0                # Firebase core (if using Firebase)
+  firebase_auth: ^5.3.1                # Firebase auth
+  cloud_firestore: ^5.4.3              # Firestore database
+  firebase_storage: ^12.3.2            # Firebase storage
+  firebase_messaging: ^15.1.3          # FCM Push notifications
+  firebase_analytics: ^11.3.3          # App analytics
 
-
-  supabase: ^2.10.2
-  supabase_flutter: ^2.12.0       # Official Supabase Flutter SDK
-  supabase_auth_ui: ^0.5.5        # Pre-built auth UI (optional)
-  supabase_error_translator_flutter: ^1.0.2
+  # Offline-first & local caching
+  hive: ^2.2.3                         # Core Hive DB
+  hive_flutter: ^1.1.0                 # Hive Flutter bindings
+  connectivity_plus: ^6.1.0            # Network state monitoring
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8

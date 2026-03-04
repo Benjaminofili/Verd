@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:verd/core/constants/app_theme.dart';
 
-enum AppButtonVariant { primary, secondary, ghost }
+enum AppButtonVariant { primary, secondary, ghost, outlined }
 enum AppButtonSize { small, medium, large }
 
 class AppButton extends StatelessWidget {
@@ -14,6 +14,7 @@ class AppButton extends StatelessWidget {
   final bool isFullWidth;
   final Widget? leadingIcon;
   final Widget? trailingIcon;
+  final Widget? icon; // mapped to leadingIcon for convenience
   final Color? customColor;
 
   const AppButton({
@@ -27,6 +28,7 @@ class AppButton extends StatelessWidget {
     this.isFullWidth = true,
     this.leadingIcon,
     this.trailingIcon,
+    this.icon,
     this.customColor,
   });
 
@@ -77,8 +79,8 @@ class AppButton extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (leadingIcon != null) ...[
-          leadingIcon!,
+        if (leadingIcon != null || icon != null) ...[
+          leadingIcon ?? icon!,
           const SizedBox(width: AppSpacing.sm),
         ],
         Flexible(
@@ -134,6 +136,23 @@ class AppButton extends StatelessWidget {
         elevation: 0,
         shadowColor: Colors.transparent,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.button),
+        ),
+      ),
+      AppButtonVariant.outlined => ElevatedButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        foregroundColor: AppColors.textPrimary,
+        disabledBackgroundColor: Colors.transparent,
+        disabledForegroundColor: AppColors.gray400,
+        padding: _padding(context),
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        side: BorderSide(
+          color: isActive ? AppColors.gray300 : AppColors.gray200,
+          width: 1,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.button),
         ),

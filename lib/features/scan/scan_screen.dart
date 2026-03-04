@@ -75,14 +75,8 @@ class _ScanScreenState extends State<ScanScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.md),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        _buildCircularIconButton(
-                          icon: Icons.chevron_left,
-                          onPressed: () {
-                            context.go('/home');
-                          },
-                        ),
                         _buildCircularIconButton(
                           icon: Icons.history,
                           onPressed: () {

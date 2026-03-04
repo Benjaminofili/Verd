@@ -8,8 +8,9 @@ class HelpSupportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         leadingWidth: 80,
         leading: TextButton(
@@ -23,7 +24,7 @@ class HelpSupportScreen extends StatelessWidget {
         ),
         title: Text(
           'Help & Support',
-          style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
+          style: AppTypography.h4.copyWith(color: theme.colorScheme.onSurface),
         ),
         centerTitle: true,
       ),
@@ -36,23 +37,26 @@ class HelpSupportScreen extends StatelessWidget {
               'Contact Us',
               style: AppTypography.h3.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: AppSpacing.md),
             _buildContactItem(
+              context: context,
               icon: Icons.email_outlined,
               title: 'Email Support',
               subtitle: 'support@verd.app',
               onTap: () {},
             ),
             _buildContactItem(
+              context: context,
               icon: Icons.phone_outlined,
               title: 'Call Us',
               subtitle: '+1 (800) 123-4567',
               onTap: () {},
             ),
             _buildContactItem(
+              context: context,
               icon: Icons.chat_bubble_outline,
               title: 'Live Chat',
               subtitle: 'Chat with our team',
@@ -64,19 +68,22 @@ class HelpSupportScreen extends StatelessWidget {
               'Frequently Asked Questions',
               style: AppTypography.h3.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: AppSpacing.md),
             _buildFAQItem(
+              context: context,
               question: 'How do I scan a crop?',
               answer: 'Go to the Scan tab, position your crop within the frame, and tap the camera button. The app will analyze the image and provide results.',
             ),
             _buildFAQItem(
+              context: context,
               question: 'How accurate is the disease detection?',
               answer: 'Our AI model has been trained on thousands of crop images and maintains a 95% accuracy rate for common crop diseases.',
             ),
             _buildFAQItem(
+              context: context,
               question: 'Can I use the app offline?',
               answer: 'Yes! Enable offline mode in settings. Previously downloaded disease data will be available for scanning.',
             ),
@@ -88,11 +95,13 @@ class HelpSupportScreen extends StatelessWidget {
   }
 
   Widget _buildContactItem({
+    required BuildContext context,
     required IconData icon,
     required String title,
     required String subtitle,
     required VoidCallback onTap,
   }) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
       child: AppCard(
@@ -123,14 +132,14 @@ class HelpSupportScreen extends StatelessWidget {
                     title,
                     style: AppTypography.bodyLarge.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
                     style: AppTypography.bodySmall.copyWith(
-                      color: AppColors.gray600,
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
@@ -147,9 +156,11 @@ class HelpSupportScreen extends StatelessWidget {
   }
 
   Widget _buildFAQItem({
+    required BuildContext context,
     required String question,
     required String answer,
   }) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
       child: AppCard(

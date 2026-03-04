@@ -1,23 +1,29 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_assets.dart';
 import 'package:verd/core/constants/app_theme.dart';
+import 'package:verd/data/services/firebase_auth_service.dart';
+import 'package:verd/providers/auth_provider.dart';
 import 'package:verd/shared/widgets/app_button.dart';
 import 'package:verd/shared/widgets/app_text_field.dart';
 
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _fullNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool _isLoading = false;
+  bool _isGoogleLoading = false;
 
   @override
   void dispose() {
@@ -28,9 +34,73 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  void _onSignUp() {
-    // TODO: Implement actual signup logic
-    context.go('/permissions');
+  Future<void> _onSignUp() async {
+    if (_isLoading || _isGoogleLoading) return;
+
+    final name = _fullNameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
+
+    if (name.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      _showError('Please fill in all fields.');
+      return;
+    }
+    if (password.length < 6) {
+      _showError('Password must be at least 6 characters.');
+      return;
+    }
+    if (password != confirmPassword) {
+      _showError('Passwords do not match.');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      await ref.read(authNotifierProvider.notifier).register(
+            name: name,
+            email: email,
+            password: password,
+          );
+      if (mounted) context.go('/permissions');
+    } on FirebaseAuthException catch (e) {
+      if (mounted) _showError(FirebaseAuthService.friendlyErrorMessage(e.code));
+    } catch (e) {
+      if (mounted) _showError('An unexpected error occurred. Please try again.');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _onGoogleSignUp() async {
+    if (_isLoading || _isGoogleLoading) return;
+    setState(() => _isGoogleLoading = true);
+
+    try {
+      final user = await ref.read(authRepositoryProvider).signInWithGoogle();
+      if (user != null && mounted) {
+        ref.invalidate(authStateProvider);
+        context.go('/permissions');
+      }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) _showError(FirebaseAuthService.friendlyErrorMessage(e.code));
+    } catch (e) {
+      if (mounted) _showError('Google Sign-Up failed. Please try again.');
+    } finally {
+      if (mounted) setState(() => _isGoogleLoading = false);
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.redAccent,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
   }
 
   @override
@@ -43,14 +113,10 @@ class _SignupScreenState extends State<SignupScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // ── Top Section ──
               Center(
                 child: Column(
                   children: [
-                    SvgPicture.asset(
-                      AppAssets.logoSvg,
-                      height: 48,
-                    ),
+                    SvgPicture.asset(AppAssets.logoSvg, height: 48),
                     const SizedBox(height: AppSpacing.lg),
                     Text(
                       'Join VERD',
@@ -71,64 +137,6 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: AppSpacing.xxxl),
 
-              // ── Profile Picture ──
-              Center(
-                child: Column(
-                  children: [
-                    Text(
-                      'Profile Picture (Optional)',
-                      style: AppTypography.bodySmall.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    GestureDetector(
-                      onTap: () {
-                        // TODO: Implement image picker logic
-                      },
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 10,
-                              spreadRadius: 1,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.camera_alt_outlined,
-                              color: Colors.white,
-                              size: 32,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Add Photo',
-                              style: AppTypography.bodySmall.copyWith(
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xxxl),
-
-              // ── Form Fields ──
               AppTextField(
                 label: 'Full Name',
                 hint: 'John Doe',
@@ -138,9 +146,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: AppSpacing.lg),
               
-              AppTextField.email(
-                controller: _emailController,
-              ),
+              AppTextField.email(controller: _emailController),
               const SizedBox(height: AppSpacing.lg),
 
               AppTextField.password(
@@ -160,46 +166,45 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: AppSpacing.xxl),
 
-              // ── Terms & Conditions ──
-              Text.rich(
-                TextSpan(
-                  text: 'By signing up, you agree to our ',
-                  style: AppTypography.bodySmall.copyWith(color: AppColors.gray600),
-                  children: [
-                    TextSpan(
-                      text: 'Terms & Conditions',
-                      style: AppTypography.bodySmall.copyWith(color: AppColors.primary),
-                    ),
-                    const TextSpan(text: ' and\n'),
-                    TextSpan(
-                      text: 'Privacy Policy',
-                      style: AppTypography.bodySmall.copyWith(color: AppColors.primary),
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppSpacing.xxl),
-
-              // ── Sign Up Button ──
               AppButton(
-                text: 'SIGN UP',
-                onPressed: _onSignUp,
+                text: _isLoading ? 'CREATING ACCOUNT...' : 'SIGN UP WITH EMAIL',
+                onPressed: _isLoading || _isGoogleLoading ? null : _onSignUp,
+                isLoading: _isLoading,
+              ),
+              const SizedBox(height: AppSpacing.lg),
+
+              // ── OR Divider ──
+              Row(
+                children: [
+                  const Expanded(child: Divider(color: AppColors.gray200, thickness: 1)),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                    child: Text('OR', style: AppTypography.bodySmall.copyWith(color: AppColors.gray500, fontWeight: FontWeight.bold)),
+                  ),
+                  const Expanded(child: Divider(color: AppColors.gray200, thickness: 1)),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.lg),
+
+              // ── Google Sign Up Button ──
+              AppButton(
+                text: _isGoogleLoading ? 'PLEASE WAIT...' : 'SIGN UP WITH GOOGLE',
+                onPressed: _isLoading || _isGoogleLoading ? null : _onGoogleSignUp,
+                isLoading: _isGoogleLoading,
+                variant: AppButtonVariant.outlined,
+                icon: const Icon(Icons.g_mobiledata, size: 32),
               ),
               const SizedBox(height: AppSpacing.xxl),
 
-              // ── Login Prompt ──
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     "Already have an account? ",
-                    style: AppTypography.bodySmall.copyWith(
-                      color: AppColors.gray600,
-                    ),
+                    style: AppTypography.bodySmall.copyWith(color: AppColors.gray600),
                   ),
                   GestureDetector(
-                    onTap: () => context.pop(), // Pop goes back to Login
+                    onTap: () => context.pop(),
                     child: Text(
                       'Login',
                       style: AppTypography.bodySmall.copyWith(

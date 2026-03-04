@@ -102,11 +102,12 @@ class _LoadingScreenState extends State<LoadingScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: switch (widget._type) {
         _LoadingType.splash => AppColors.primary,
         _LoadingType.simple || _LoadingType.progress =>
-        AppColors.backgroundPrimary,
+        theme.scaffoldBackgroundColor,
       },
       body: SafeArea(
         child: FadeTransition(
@@ -206,6 +207,7 @@ class _SimpleBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final scaleFactor =
     MediaQuery.textScalerOf(context).scale(1.0).clamp(0.8, 1.3);
 
@@ -227,7 +229,7 @@ class _SimpleBody extends StatelessWidget {
             Text(
               message!,
               style: AppTypography.body.copyWith(
-                color: AppColors.textSecondary,
+                color: theme.colorScheme.onSurfaceVariant,
                 fontSize: AppTypography.base * scaleFactor,
               ),
               textAlign: TextAlign.center,
@@ -254,6 +256,7 @@ class _ProgressBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final sw = MediaQuery.sizeOf(context).width;
     final scaleFactor =
     MediaQuery.textScalerOf(context).scale(1.0).clamp(0.8, 1.3);
@@ -294,7 +297,7 @@ class _ProgressBody extends StatelessWidget {
               Text(
                 message!,
                 style: AppTypography.bodySmall.copyWith(
-                  color: AppColors.textSecondary,
+                  color: theme.colorScheme.onSurfaceVariant,
                   fontSize: AppTypography.sm * scaleFactor,
                 ),
                 textAlign: TextAlign.center,
@@ -321,7 +324,7 @@ class _ProgressBody extends StatelessWidget {
             Text(
               'Step ${currentStep + 1} of ${steps.length}',
               style: AppTypography.caption.copyWith(
-                color: AppColors.textSecondary,
+                color: theme.colorScheme.onSurfaceVariant,
                 fontSize: AppTypography.xs * scaleFactor,
               ),
             ),
@@ -373,9 +376,9 @@ class _ProgressBody extends StatelessWidget {
                         steps[i],
                         style: AppTypography.body.copyWith(
                           color: isDone
-                              ? AppColors.textSecondary
+                              ? theme.colorScheme.onSurfaceVariant
                               : isCurrent
-                              ? AppColors.textPrimary
+                              ? theme.colorScheme.onSurface
                               : AppColors.textDisabled,
                           fontWeight: isCurrent
                               ? AppTypography.semibold

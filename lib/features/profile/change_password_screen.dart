@@ -32,8 +32,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         leadingWidth: 80,
         leading: TextButton(
@@ -47,7 +48,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         ),
         title: Text(
           'Change Password',
-          style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
+          style: AppTypography.h4.copyWith(color: theme.colorScheme.onSurface),
         ),
         centerTitle: true,
         actions: [
@@ -101,14 +102,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     'Password Requirements:',
                     style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.md),
-                  _buildRequirementItem('At least 8 characters long'),
-                  _buildRequirementItem('Contains uppercase and lowercase letters'),
-                  _buildRequirementItem('Contains at least one number'),
-                  _buildRequirementItem('Contains at least one special character'),
+                  _buildRequirementItem(context, 'At least 8 characters long'),
+                  _buildRequirementItem(context, 'Contains uppercase and lowercase letters'),
+                  _buildRequirementItem(context, 'Contains at least one number'),
+                  _buildRequirementItem(context, 'Contains at least one special character'),
                 ],
               ),
             ),
@@ -118,13 +119,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     );
   }
 
-  Widget _buildRequirementItem(String text) {
+  Widget _buildRequirementItem(BuildContext context, String text) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
       child: Text(
         text,
         style: AppTypography.bodySmall.copyWith(
-          color: AppColors.gray600,
+          color: theme.colorScheme.onSurfaceVariant,
         ),
       ),
     );
