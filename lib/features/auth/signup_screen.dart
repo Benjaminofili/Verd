@@ -9,6 +9,7 @@ import 'package:verd/data/services/firebase_auth_service.dart';
 import 'package:verd/providers/auth_provider.dart';
 import 'package:verd/shared/widgets/app_button.dart';
 import 'package:verd/shared/widgets/app_text_field.dart';
+import 'package:df_localization/df_localization.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -119,7 +120,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     SvgPicture.asset(AppAssets.logoSvg, height: 48),
                     const SizedBox(height: AppSpacing.lg),
                     Text(
-                      'Join VERD',
+                      'create_account'.tr(),
                       style: AppTypography.h2.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.textPrimary,
@@ -127,7 +128,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      'Create your account to get started',
+                      'create_profile'.tr(),
                       style: AppTypography.body.copyWith(
                         color: AppColors.gray600,
                       ),
@@ -138,8 +139,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               const SizedBox(height: AppSpacing.xxxl),
 
               AppTextField(
-                label: 'Full Name',
-                hint: 'John Doe',
+                label: 'full_name'.tr(),
+                hint: 'full_name'.tr(),
                 controller: _fullNameController,
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
@@ -150,16 +151,16 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               const SizedBox(height: AppSpacing.lg),
 
               AppTextField.password(
-                label: 'Password',
-                hint: 'Create a password',
+                label: 'password'.tr(),
+                hint: 'password'.tr(),
                 controller: _passwordController,
                 textInputAction: TextInputAction.next,
               ),
               const SizedBox(height: AppSpacing.lg),
 
               AppTextField.password(
-                label: 'Confirm Password',
-                hint: 'Confirm your password',
+                label: 'confirm_password'.tr(),
+                hint: 'confirm_password'.tr(),
                 controller: _confirmPasswordController,
                 textInputAction: TextInputAction.done,
                 onSubmitted: (_) => _onSignUp(),
@@ -167,7 +168,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               const SizedBox(height: AppSpacing.xxl),
 
               AppButton(
-                text: _isLoading ? 'CREATING ACCOUNT...' : 'SIGN UP WITH EMAIL',
+                text: _isLoading ? 'loading'.tr() : 'sign_up'.tr().toUpperCase(),
                 onPressed: _isLoading || _isGoogleLoading ? null : _onSignUp,
                 isLoading: _isLoading,
               ),
@@ -188,7 +189,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
               // ── Google Sign Up Button ──
               AppButton(
-                text: _isGoogleLoading ? 'PLEASE WAIT...' : 'SIGN UP WITH GOOGLE',
+                text: _isGoogleLoading ? 'loading'.tr() : 'google_sign_in'.tr().toUpperCase(),
                 onPressed: _isLoading || _isGoogleLoading ? null : _onGoogleSignUp,
                 isLoading: _isGoogleLoading,
                 variant: AppButtonVariant.outlined,
@@ -200,13 +201,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Already have an account? ",
+                    '${'already_have_account'.tr().split('?').first}? ',
                     style: AppTypography.bodySmall.copyWith(color: AppColors.gray600),
                   ),
                   GestureDetector(
                     onTap: () => context.pop(),
                     child: Text(
-                      'Login',
+                      'login'.tr(),
                       style: AppTypography.bodySmall.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,

@@ -1,57 +1,45 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:verd/core/constants/app_theme.dart';
 import 'package:verd/shared/widgets/app_card.dart';
-import 'package:verd/shared/widgets/app_toast.dart';
+import 'package:verd/providers/notification_provider.dart';
+import 'package:verd/providers/settings_provider.dart';
+import 'package:df_localization/df_localization.dart';
 
-class NotificationSettingsScreen extends StatefulWidget {
+class NotificationSettingsScreen extends ConsumerWidget {
   const NotificationSettingsScreen({super.key});
 
   @override
-  State<NotificationSettingsScreen> createState() => _NotificationSettingsScreenState();
-}
-
-class _NotificationSettingsScreenState extends State<NotificationSettingsScreen> {
-  bool pushNotifications = true;
-  bool emailNotifications = true;
-  bool scanResults = true;
-  bool learningUpdates = false;
-  bool weeklyReports = true;
-  bool systemAlerts = true;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final topics = ref.watch(notificationSettingsProvider);
+    final notifier = ref.read(notificationSettingsProvider.notifier);
+    final settingsNotifier = ref.read(settingsProvider.notifier);
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         leadingWidth: 80,
         leading: TextButton(
           onPressed: () {
-            context.pop();
+            Navigator.of(context).pop();
           },
           child: Text(
-            'Back',
+            'back'.tr(),
             style: AppTypography.buttonSmall.copyWith(color: AppColors.primary),
           ),
         ),
         title: Text(
-          'Notifications',
+          'notifications'.tr(),
           style: AppTypography.h4.copyWith(color: theme.colorScheme.onSurface),
         ),
         centerTitle: true,
         actions: [
           TextButton(
-            onPressed: () {
-              AppToast.show(
-                context,
-                message: 'Settings saved',
-                variant: ToastVariant.success,
-              );
-              context.pop();
-            },
+            onPressed: () => Navigator.of(context).pop(),
             child: Text(
-              'Save',
+              'done'.tr(),
               style: AppTypography.buttonSmall.copyWith(color: AppColors.primary),
             ),
           ),
@@ -64,46 +52,111 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           children: [
             _buildToggleItem(
               context: context,
-              title: 'Push Notifications',
-              subtitle: 'Receive notifications on your device',
-              value: pushNotifications,
-              onChanged: (val) => setState(() => pushNotifications = val),
+              title: 'push_notifications'.tr(),
+              subtitle: 'push_notifications_desc'.tr(),
+              value: settingsNotifier.notificationsEnabled,
+              onChanged: (val) async {
+                if (val) {
+                  // Initialize FCM service if turning on
+                  await ref.read(fcmServiceProvider).init();
+                }
+                await settingsNotifier.setNotificationsEnabled(val);
+              },
             ),
+            const Divider(height: AppSpacing.xl),
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.md),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'topics'.tr(),
+                  style: AppTypography.h4.copyWith(
+                    fontSize: 18,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ),
+            ),
+            _buildToggleItem(
+              context: context,
+              title: 'scan_results'.tr(),
+              subtitle: 'scan_results_desc'.tr(),
+              value: topics[FcmTopics.scanResults] ?? false,
+              onChanged: (val) => notifier.toggleTopic(FcmTopics.scanResults, val),
+              enabled: settingsNotifier.notificationsEnabled,
+            ),
+            _buildToggleItem(
+              context: context,
+              title: 'learning_updates'.tr(),
+              subtitle: 'learning_updates_desc'.tr(),
+              value: topics[FcmTopics.learningUpdates] ?? false,
+              onChanged: (val) => notifier.toggleTopic(FcmTopics.learningUpdates, val),
+              enabled: settingsNotifier.notificationsEnabled,
+            ),
+            _buildToggleItem(
+              context: context,
+              title: 'system_alerts'.tr(),
+              subtitle: 'system_alerts_desc'.tr(),
+              value: topics[FcmTopics.systemAlerts] ?? false,
+              onChanged: (val) => notifier.toggleTopic(FcmTopics.systemAlerts, val),
+              enabled: settingsNotifier.notificationsEnabled,
+            ),
+            const Divider(height: AppSpacing.xl),
             _buildToggleItem(
               context: context,
               title: 'Email Notifications',
               subtitle: 'Receive updates via email',
-              value: emailNotifications,
-              onChanged: (val) => setState(() => emailNotifications = val),
+              value: true, // Mocked for now
+              onChanged: (val) {},
+              enabled: true,
             ),
-            _buildToggleItem(
-              context: context,
-              title: 'Scan Results',
-              subtitle: 'Get notified when scan is complete',
-              value: scanResults,
-              onChanged: (val) => setState(() => scanResults = val),
-            ),
-            _buildToggleItem(
-              context: context,
-              title: 'Learning Updates',
-              subtitle: 'New articles and guides',
-              value: learningUpdates,
-              onChanged: (val) => setState(() => learningUpdates = val),
-            ),
-            _buildToggleItem(
-              context: context,
-              title: 'Weekly Reports',
-              subtitle: 'Summary of your activity',
-              value: weeklyReports,
-              onChanged: (val) => setState(() => weeklyReports = val),
-            ),
-            _buildToggleItem(
-              context: context,
-              title: 'System Alerts',
-              subtitle: 'Important app updates',
-              value: systemAlerts,
-              onChanged: (val) => setState(() => systemAlerts = val),
-            ),
+            if (kDebugMode) ...[
+              const Divider(height: AppSpacing.xxl),
+              Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'debug_tools'.tr(),
+                    style: AppTypography.h4.copyWith(
+                      fontSize: 18,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                ),
+              ),
+              AppCard(
+                variant: AppCardVariant.outlined,
+                onTap: () async {
+                  final token = await ref.read(fcmServiceProvider).init();
+                  if (token != null) {
+                    await Clipboard.setData(ClipboardData(text: token));
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('token_copied'.tr())),
+                      );
+                    }
+                  }
+                },
+                child: ListTile(
+                  leading: Icon(
+                    Icons.copy_outlined,
+                    color: theme.brightness == Brightness.dark ? AppColors.errorLight : AppColors.error,
+                  ),
+                  title: Text(
+                    'copy_token'.tr(),
+                    style: AppTypography.bodyLarge.copyWith(
+                      fontWeight: AppTypography.medium,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Use this to send test messages from Firebase Console',
+                    style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
@@ -116,6 +169,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
     required String subtitle,
     required bool value,
     required ValueChanged<bool> onChanged,
+    bool enabled = true,
   }) {
     final theme = Theme.of(context);
     return Padding(
@@ -149,11 +203,13 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
             ),
             Switch(
               value: value,
-              onChanged: onChanged,
-              activeColor: Colors.white,
+              onChanged: enabled ? onChanged : null,
+              activeThumbColor: Colors.white,
               activeTrackColor: AppColors.primary,
               inactiveThumbColor: Colors.white,
-              inactiveTrackColor: AppColors.gray300,
+              inactiveTrackColor: theme.brightness == Brightness.dark 
+                  ? theme.colorScheme.surfaceContainerHighest 
+                  : AppColors.gray300,
             ),
           ],
         ),

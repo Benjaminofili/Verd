@@ -4,3 +4,8 @@ Article screen dark mode
 gallery screen dark mode
 edit profile modal needs work on dark mode 
 the profile screen need a redesign 
+
+
+some widgets are not supporting dark mode
+notification settings screen needs work on dark mode
+scan history screen icon buttons needs work on dark mode

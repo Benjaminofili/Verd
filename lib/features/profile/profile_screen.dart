@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_theme.dart';
 import 'package:verd/core/providers/theme_provider.dart';
-import 'package:verd/shared/widgets/app_button.dart';
+
 import 'package:verd/shared/dialogs/confirmation_dialog.dart';
 import 'package:verd/shared/widgets/skeleton_loader.dart';
+import 'package:df_localization/df_localization.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -84,7 +85,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Profile', style: AppTypography.h2.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+                          Text('Profile||profile'.tr(), style: AppTypography.h2.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
                           IconButton(
                             icon: const Icon(Icons.more_vert, color: Colors.white),
                             onPressed: () {},
@@ -179,7 +180,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Account Overview',
+                            'Account Overview||account_overview'.tr(),
                             style: AppTypography.h3.copyWith(
                               fontWeight: FontWeight.bold,
                               color: theme.colorScheme.onSurface,
@@ -191,41 +192,41 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             theme: theme,
                             icon: Icons.person_outline,
                             iconColor: const Color(0xFF2196F3), // Light Blue
-                            title: 'My Profile',
+                            title: 'My Profile||my_profile'.tr(),
                             onTap: () => context.push('/edit-profile'),
                           ),
                           _buildMenuItem(
                             theme: theme,
                             icon: Icons.history,
                             iconColor: const Color(0xFF4CAF50), // Green 
-                            title: 'Scan History',
-                            onTap: () => context.push('/history'),
+                            title: 'Scan History||scan_history'.tr(),
+                            onTap: () => context.push('/scan-history'),
                           ),
                           _buildMenuItem(
                             theme: theme,
                             icon: Icons.notifications_none,
                             iconColor: const Color(0xFFE91E63), // Pink
-                            title: 'Notifications',
+                            title: 'Notifications||notifications'.tr(),
                             onTap: () => context.push('/notifications'),
                           ),
                           _buildMenuItem(
                             theme: theme,
                             icon: Icons.lock_outline,
                             iconColor: const Color(0xFFFF9800), // Orange
-                            title: 'Change Password',
+                            title: 'Change Password||change_password'.tr(),
                             onTap: () => context.push('/change-password'),
                           ),
                           _buildMenuItem(
                             theme: theme,
                             icon: Icons.language,
                             iconColor: const Color(0xFF9C27B0), // Purple
-                            title: 'Change Language',
+                            title: 'Change Language||change_language'.tr(),
                             onTap: () => context.push('/language'),
                           ),
 
                           const SizedBox(height: AppSpacing.xl),
                           Text(
-                            'Preferences & Support',
+                            'Preferences & Support||preferences_support'.tr(),
                             style: AppTypography.h3.copyWith(
                               fontWeight: FontWeight.bold,
                               color: theme.colorScheme.onSurface,
@@ -239,7 +240,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             theme: theme,
                             icon: Icons.help_outline,
                             iconColor: const Color(0xFF00BCD4), // Cyan
-                            title: 'Help & Support',
+                            title: 'Help & Support||help_support'.tr(),
                             onTap: () => context.push('/help-support'),
                           ),
                           
@@ -247,7 +248,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             theme: theme,
                             icon: Icons.logout,
                             iconColor: const Color(0xFFF44336), // Red
-                            title: 'Logout',
+                            title: 'Logout||logout'.tr(),
                             onTap: () async {
                               final confirmed = await ConfirmationDialog.logout(context);
                               if (confirmed == true && context.mounted) {
@@ -348,7 +349,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               const SizedBox(width: AppSpacing.lg),
               Expanded(
                 child: Text(
-                  'Appearance',
+                  'Appearance||appearance'.tr(),
                   style: AppTypography.bodyLarge.copyWith(
                     fontWeight: FontWeight.w600,
                     color: theme.colorScheme.onSurface,
@@ -363,21 +364,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: SizedBox(
               width: double.infinity,
               child: SegmentedButton<ThemeMode>(
-                segments: const [
+                segments: [
                   ButtonSegment<ThemeMode>(
                     value: ThemeMode.system,
-                    label: Text('System'),
-                    icon: Icon(Icons.brightness_auto, size: 16),
+                    label: Text('System||system'.tr()),
+                    icon: const Icon(Icons.brightness_auto, size: 16),
                   ),
                   ButtonSegment<ThemeMode>(
                     value: ThemeMode.light,
-                    label: Text('Light'),
-                    icon: Icon(Icons.light_mode, size: 16),
+                    label: Text('Light||light'.tr()),
+                    icon: const Icon(Icons.light_mode, size: 16),
                   ),
                   ButtonSegment<ThemeMode>(
                     value: ThemeMode.dark,
-                    label: Text('Dark'),
-                    icon: Icon(Icons.dark_mode, size: 16),
+                    label: Text('Dark||dark'.tr()),
+                    icon: const Icon(Icons.dark_mode, size: 16),
                   ),
                 ],
                 selected: {currentMode},

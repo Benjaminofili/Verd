@@ -66,7 +66,7 @@ class _SuccessIndicatorState extends State<SuccessIndicator>
 
     return AnimatedBuilder(
       animation: _ctrl,
-      builder: (_, __) => SizedBox(
+      builder: (_, _) => SizedBox(
         width: s,
         height: s,
         child: Stack(

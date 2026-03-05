@@ -6,6 +6,9 @@ import 'firebase_options.dart';
 import 'data/services/local_storage.dart';
 import 'providers/auth_provider.dart';
 import 'app.dart';
+import 'package:df_localization/df_localization.dart';
+import 'data/services/fcm_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,12 +18,23 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Register background handler early
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   // Initialize Hive Offline Storage
   await Hive.initFlutter();
 
   // Open Hive boxes (register adapters + open typed boxes)
   final localStorage = LocalStorageService();
   await localStorage.init();
+
+
+  // Initialize Localization
+  final tc = TranslationController.createInstance(
+    translationsDirPath: 'assets/translations',
+  );
+  // Eagerly load translations for the initial locale before showing UI
+  await tc.setLocale(tc.fallbackLocale);
 
   runApp(
     ProviderScope(

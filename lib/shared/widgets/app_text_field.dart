@@ -58,6 +58,7 @@ class AppTextField extends StatefulWidget {
     this.label,
     this.hint,
     this.errorText,
+    // ignore: unused_element_parameter
     this.helperText,
     this.controller,
     this.focusNode,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_theme.dart';
 import 'package:verd/core/constants/app_assets.dart';
-import 'package:verd/shared/widgets/app_toast.dart';
+
 import 'package:verd/shared/widgets/skeleton_loader.dart';
 import 'package:verd/shared/widgets/bouncing_card.dart';
 
@@ -244,13 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _showComingSoonToast(BuildContext context) {
-    AppToast.show(
-      context,
-      message: 'Article coming soon',
-      variant: ToastVariant.info,
-    );
-  }
+
 
   Widget _buildQuickActionCard({
     required Color iconBackgroundColor,

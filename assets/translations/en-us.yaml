@@ -1,0 +1,114 @@
+home: Home
+profile: Profile
+scan: Scan
+settings: Settings
+language: Language
+change_language: Change Language
+login: Login
+logout: Logout
+welcome: Welcome to Verd
+clarity: Clarity for your crops
+
+
+# General UI
+app_name: Verd
+ok: OK
+cancel: Cancel
+yes: Yes
+no: No
+save: Save
+done: Done
+back: Back
+error: Error
+success: Success
+loading: Loading...
+
+# Navigation
+home: Home
+scan: Scan
+profile: Profile
+learning: Learning
+history: History
+
+# Authentication
+login: Login
+sign_in: Sign In
+sign_up: Sign Up
+email: Email
+password: Password
+forgot_password: Forgot Password?
+create_account: Create Account
+create_profile: Create Profile
+confirm_password: Confirm Password
+dont_have_account: Don't have an account? Sign Up
+already_have_account: Already have an account? Sign In
+or_continue_with: Or continue with
+google_sign_in: Sign in with Google
+
+# Form Validation
+email_required: Email is required
+invalid_email: Invalid email address
+password_required: Password is required
+password_too_short: Password must be at least 6 characters
+passwords_do_not_match: Passwords do not match
+
+# Home & Dashboard
+dashboard: Dashboard
+hello_user: Hello, {name}!
+weather: Weather
+recent_scans: Recent Scans
+no_recent_scans: No recent scans yet.
+start_new_scan: Start a new scan
+view_all: View All
+
+# Scan Flow
+take_photo: Take Photo
+gallery: Gallery
+analyzing: Analyzing crop...
+diagnosis: Diagnosis
+confidence: Confidence
+recommendations: Recommendations
+save_scan: Save Scan
+scan_failed: Scan Failed
+disease_detected: Disease Detected
+healthy_plant: Healthy Plant
+
+# Profile & Settings
+account_overview: Account Overview
+my_profile: My Profile
+scan_history: Scan History
+notifications: Notifications
+change_password: Change Password
+change_language: Change Language
+preferences_support: Preferences & Support
+appearance: Appearance
+help_support: Help & Support
+logout: Logout
+logout_confirm: Are you sure you want to logout?
+system: System
+light: Light
+dark: Dark
+edit_profile: Edit Profile
+full_name: Full Name
+farm_location: Farm Location
+language: Language
+
+# Learning & Articles
+article_library: Article Library
+read_more: Read More
+play_audio: Play Audio
+pause_audio: Pause Audio
+
+# Notifications
+push_notifications: Push Notifications
+push_notifications_desc: Receive notifications on your device
+topics: Topics
+scan_results: Scan Results
+scan_results_desc: Get notified when scan is complete
+learning_updates: Learning Updates
+learning_updates_desc: New articles and guides
+system_alerts: System Alerts
+system_alerts_desc: Important app updates
+debug_tools: Debug Tools
+copy_token: Copy FCM Token
+token_copied: FCM Token copied to clipboard

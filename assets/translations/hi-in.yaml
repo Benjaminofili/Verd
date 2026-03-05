@@ -1,0 +1,56 @@
+home: होम
+profile: प्रोफ़ाइल
+scan: स्कैन
+settings: सेटिंग्स
+language: भाषा
+change_language: भाषा बदलें
+login: लॉगिन
+logout: लॉगआउट
+welcome: Verd में आपका स्वागत है
+clarity: आपकी फसलों के लिए स्पष्टता
+ok: ठीक है
+cancel: रद्द करें
+yes: हाँ
+no: नहीं
+save: सहेजें
+done: पूरा
+back: वापस
+error: त्रुटि
+success: सफलता
+loading: लोड हो रहा है...
+dashboard: डैशबोर्ड
+hello_user: नमस्ते, {name}!
+weather: मौसम
+recent_scans: हाल के स्कैन
+no_recent_scans: अभी तक कोई हाल का स्कैन नहीं
+start_new_scan: नया स्कैन शुरू करें
+view_all: सभी देखें
+take_photo: फोटो लें
+gallery: गैलरी
+analyzing: फसल का विश्लेषण हो रहा है...
+diagnosis: निदान
+confidence: विश्वास स्तर
+recommendations: सिफारिशें
+save_scan: स्कैन सहेजें
+scan_failed: स्कैन विफल
+disease_detected: रोग का पता चला
+healthy_plant: स्वस्थ पौधा
+account_overview: खाते का अवलोकन
+my_profile: मेरी प्रोफ़ाइल
+scan_history: स्कैन इतिहास
+notifications: सूचनाएँ
+change_password: पासवर्ड बदलें
+preferences_support: प्राथमिकताएँ और सहायता
+appearance: रूप
+help_support: सहायता और समर्थन
+logout_confirm: क्या आप लॉगआउट करना चाहते हैं?
+system: सिस्टम
+light: हल्का
+dark: गहरा
+edit_profile: प्रोफ़ाइल संपादित करें
+full_name: पूरा नाम
+farm_location: खेत का स्थान
+article_library: लेख पुस्तकालय
+read_more: और पढ़ें
+play_audio: ऑडियो चलाएँ
+pause_audio: ऑडियो रोकें

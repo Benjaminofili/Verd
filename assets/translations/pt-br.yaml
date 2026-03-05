@@ -1,0 +1,56 @@
+home: Início
+profile: Perfil
+scan: Escanear
+settings: Configurações
+language: Idioma
+change_language: Alterar idioma
+login: Entrar
+logout: Sair
+welcome: Bem-vindo ao Verd
+clarity: Clareza para suas colheitas
+ok: OK
+cancel: Cancelar
+yes: Sim
+no: Não
+save: Salvar
+done: Concluído
+back: Voltar
+error: Erro
+success: Sucesso
+loading: Carregando...
+dashboard: Painel
+hello_user: Olá, {name}!
+weather: Clima
+recent_scans: Scans recentes
+no_recent_scans: Nenhum scan recente.
+start_new_scan: Iniciar novo scan
+view_all: Ver tudo
+take_photo: Tirar foto
+gallery: Galeria
+analyzing: Analisando cultivo...
+diagnosis: Diagnóstico
+confidence: Confiança
+recommendations: Recomendações
+save_scan: Salvar scan
+scan_failed: Falha no scan
+disease_detected: Doença detectada
+healthy_plant: Planta saudável
+account_overview: Visão geral da conta
+my_profile: Meu perfil
+scan_history: Histórico de scans
+notifications: Notificações
+change_password: Alterar senha
+preferences_support: Preferências e suporte
+appearance: Aparência
+help_support: Ajuda e suporte
+logout_confirm: Tem certeza que deseja sair?
+system: Sistema
+light: Claro
+dark: Escuro
+edit_profile: Editar perfil
+full_name: Nome completo
+farm_location: Localização da fazenda
+article_library: Biblioteca de artigos
+read_more: Ler mais
+play_audio: Reproduzir áudio
+pause_audio: Pausar áudio

@@ -1,0 +1,88 @@
+# General UI
+app_name: Verd
+ok: OK
+cancel: Abbrechen
+yes: Ja
+no: Nein
+save: Speichern
+done: Fertig
+back: Zurück
+error: Fehler
+success: Erfolg
+loading: Wird geladen...
+
+# Navigation
+home: Startseite
+scan: Scannen
+profile: Profil
+learning: Lernen
+history: Verlauf
+
+# Authentication
+login: Anmelden
+sign_in: Anmelden
+sign_up: Registrieren
+email: E-Mail
+password: Passwort
+forgot_password: Passwort vergessen?
+create_account: Konto erstellen
+create_profile: Profil erstellen
+confirm_password: Passwort bestätigen
+dont_have_account: Sie haben noch kein Konto? Registrieren
+already_have_account: Sie haben bereits ein Konto? Anmelden
+or_continue_with: Oder fortfahren mit
+google_sign_in: Mit Google anmelden
+
+# Form Validation
+email_required: E-Mail ist erforderlich
+invalid_email: Ungültige E-Mail-Adresse
+password_required: Passwort ist erforderlich
+password_too_short: Das Passwort muss mindestens 6 Zeichen lang sein
+passwords_do_not_match: Die Passwörter stimmen nicht überein
+
+# Home & Dashboard
+dashboard: Dashboard
+hello_user: Hallo, {name}!
+weather: Wetter
+recent_scans: Letzte Scans
+no_recent_scans: Noch keine letzten Scans.
+start_new_scan: Neuen Scan starten
+view_all: Alle anzeigen
+
+# Scan Flow
+take_photo: Foto machen
+gallery: Galerie
+analyzing: Pflanze wird analysiert...
+diagnosis: Diagnose
+confidence: Konfidenz
+recommendations: Empfehlungen
+save_scan: Scan speichern
+scan_failed: Scan fehlgeschlagen
+disease_detected: Krankheit erkannt
+healthy_plant: Gesunde Pflanze
+
+# Profile & Settings
+account_overview: Kontoübersicht
+my_profile: Mein Profil
+scan_history: Scan-Verlauf
+notifications: Benachrichtigungen
+change_password: Passwort ändern
+change_language: Sprache ändern
+preferences_support: Einstellungen & Support
+appearance: Erscheinungsbild
+help_support: Hilfe & Support
+logout: Abmelden
+logout_confirm: Sind Sie sicher, dass Sie sich abmelden möchten?
+system: System
+light: Hell
+dark: Dunkel
+edit_profile: Profil bearbeiten
+full_name: Vollständiger Name
+farm_location: Standort der Farm
+language: Sprache
+
+# Learning & Articles
+article_library: Artikelbibliothek
+read_more: Weiterlesen
+play_audio: Audio abspielen
+pause_audio: Audio anhalten

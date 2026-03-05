@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:verd/data/models/user.dart';
 import 'package:verd/data/services/firebase_auth_service.dart';
 import 'package:verd/data/services/firestore_service.dart';

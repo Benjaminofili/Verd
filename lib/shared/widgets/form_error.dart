@@ -252,6 +252,7 @@ class ValidatedTextField extends StatefulWidget {
     FormFieldValidator<String>? validator,
     ValueChanged<String>? onChanged,
     ValueChanged<String>? onSubmitted,
+    bool enabled = true,
     bool validateOnChange = false,
     TextInputAction textInputAction = TextInputAction.done,
   }) =>
@@ -264,6 +265,7 @@ class ValidatedTextField extends StatefulWidget {
         validator: validator ?? Validators.password,
         onChanged: onChanged,
         onSubmitted: onSubmitted,
+        enabled: enabled,
         validateOnChange: validateOnChange,
         textInputAction: textInputAction,
       );

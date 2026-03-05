@@ -9,6 +9,7 @@ import 'package:verd/data/services/firebase_auth_service.dart';
 import 'package:verd/providers/auth_provider.dart';
 import 'package:verd/shared/widgets/app_button.dart';
 import 'package:verd/shared/widgets/app_text_field.dart';
+import 'package:df_localization/df_localization.dart';
 
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -94,7 +95,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   onPressed: () => context.pop(),
                   icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary, size: 20),
                   label: Text(
-                    'Back',
+                    'back'.tr(),
                     style: AppTypography.body.copyWith(
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w500,
@@ -119,7 +120,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
               // ── Title & Subtitle ──
               Text(
-                'Forgot Password?',
+                'forgot_password'.tr(),
                 style: AppTypography.h2.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
@@ -151,7 +152,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
                 // ── Reset Button ──
                 AppButton(
-                  text: _isLoading ? 'SENDING...' : 'RESET PASSWORD',
+                  text: _isLoading ? 'loading'.tr() : 'forgot_password'.tr().toUpperCase(),
                   onPressed: _isLoading ? null : _onResetPassword,
                   isLoading: _isLoading,
                 ),
@@ -182,7 +183,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       ),
                     ),
                     child: Text(
-                      'Back to Login',
+                      'back'.tr(),
                       style: AppTypography.body.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w500,

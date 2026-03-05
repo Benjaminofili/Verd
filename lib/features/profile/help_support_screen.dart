@@ -160,7 +160,7 @@ class HelpSupportScreen extends StatelessWidget {
     required String question,
     required String answer,
   }) {
-    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
       child: AppCard(

@@ -1,0 +1,88 @@
+# General UI
+app_name: Verd
+ok: OK
+cancel: Annuler
+yes: Oui
+no: Non
+save: Enregistrer
+done: Terminé
+back: Retour
+error: Erreur
+success: Succès
+loading: Chargement...
+
+# Navigation
+home: Accueil
+scan: Scanner
+profile: Profil
+learning: Apprentissage
+history: Historique
+
+# Authentication
+login: Connexion
+sign_in: Se connecter
+sign_up: S'inscrire
+email: E-mail
+password: Mot de passe
+forgot_password: Mot de passe oublié ?
+create_account: Créer un compte
+create_profile: Créer un profil
+confirm_password: Confirmer le mot de passe
+dont_have_account: Vous n'avez pas de compte ? S'inscrire
+already_have_account: Vous avez déjà un compte ? Se connecter
+or_continue_with: Ou continuer avec
+google_sign_in: Se connecter avec Google
+
+# Form Validation
+email_required: L'e-mail est requis
+invalid_email: Adresse e-mail invalide
+password_required: Le mot de passe est requis
+password_too_short: Le mot de passe doit comporter au moins 6 caractères
+passwords_do_not_match: Les mots de passe ne correspondent pas
+
+# Home & Dashboard
+dashboard: Tableau de bord
+hello_user: Bonjour, {name} !
+weather: Météo
+recent_scans: Scans récents
+no_recent_scans: Aucun scan récent pour le moment.
+start_new_scan: Démarrer un nouveau scan
+view_all: Tout voir
+
+# Scan Flow
+take_photo: Prendre une photo
+gallery: Galerie
+analyzing: Analyse de la culture...
+diagnosis: Diagnostic
+confidence: Confiance
+recommendations: Recommandations
+save_scan: Enregistrer le scan
+scan_failed: Échec du scan
+disease_detected: Maladie détectée
+healthy_plant: Plante saine
+
+# Profile & Settings
+account_overview: Aperçu du compte
+my_profile: Mon profil
+scan_history: Historique des scans
+notifications: Notifications
+change_password: Changer le mot de passe
+change_language: Changer de langue
+preferences_support: Préférences et assistance
+appearance: Apparence
+help_support: Aide et assistance
+logout: Déconnexion
+logout_confirm: Êtes-vous sûr de vouloir vous déconnecter ?
+system: Système
+light: Clair
+dark: Sombre
+edit_profile: Modifier le profil
+full_name: Nom complet
+farm_location: Emplacement de la ferme
+language: Langue
+
+# Learning & Articles
+article_library: Bibliothèque d'articles
+read_more: Lire la suite
+play_audio: Lire l'audio
+pause_audio: Mettre l'audio en pause

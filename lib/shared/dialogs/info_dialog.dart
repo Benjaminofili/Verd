@@ -24,7 +24,6 @@ class InfoDialog extends StatelessWidget {
   final String message;
   final String okLabel;
   final Widget? icon;
-  final _InfoDialogVariant _variant;
 
   const InfoDialog._({
     required this.title,
@@ -32,7 +31,7 @@ class InfoDialog extends StatelessWidget {
     required this.okLabel,
     required _InfoDialogVariant variant,
     this.icon,
-  }) : _variant = variant;
+  });
 
   // ── Static show helpers ────────────────────────────────────────────────
 
@@ -267,7 +266,7 @@ class _SuccessDialogContentState extends State<_SuccessDialogContent>
               // Animated checkmark
               AnimatedBuilder(
                 animation: _ctrl,
-                builder: (_, __) => SizedBox(
+                builder: (_, _) => SizedBox(
                   width: s,
                   height: s,
                   child: Stack(

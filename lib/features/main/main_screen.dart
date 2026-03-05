@@ -5,6 +5,7 @@ import 'package:verd/features/home/home_screen.dart';
 import 'package:verd/features/profile/profile_screen.dart';
 import 'package:verd/features/scan/scan_screen.dart';
 import 'package:verd/shared/widgets/connectivity_banner.dart';
+import 'package:df_localization/df_localization.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -89,18 +90,18 @@ class _MainScreenState extends State<MainScreen> {
             iconSize: 26, // tab button icon size
             tabBackgroundColor: AppColors.primary, // selected tab background color
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12), // navigation bar padding
-            tabs: const [
+            tabs: [
               GButton(
                 icon: Icons.home_outlined,
-                text: 'Home',
+                text: 'home'.tr(),
               ),
               GButton(
                 icon: Icons.camera_alt_outlined,
-                text: 'Scan',
+                text: 'scan'.tr(),
               ),
               GButton(
                 icon: Icons.person_outline,
-                text: 'Profile',
+                text: 'profile'.tr(),
               ),
             ],
           ),

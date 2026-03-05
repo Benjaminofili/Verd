@@ -9,6 +9,7 @@ import 'package:verd/data/services/firebase_auth_service.dart';
 import 'package:verd/providers/auth_provider.dart';
 import 'package:verd/shared/widgets/app_button.dart';
 import 'package:verd/shared/widgets/app_text_field.dart';
+import 'package:df_localization/df_localization.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -67,11 +68,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         context.go('/home');
       }
     } on FirebaseAuthException catch (e) {
-      print('🔥 FirebaseAuthException during Google Sign-In: ${e.code} - ${e.message}');
+      debugPrint('🔥 FirebaseAuthException during Google Sign-In: ${e.code} - ${e.message}');
       if (mounted) _showError(FirebaseAuthService.friendlyErrorMessage(e.code));
     } catch (e, st) {
-      print('🔥 Exact Google Sign-In Exception: $e');
-      print('🔥 Stacktrace: $st');
+      debugPrint('🔥 Exact Google Sign-In Exception: $e');
+      debugPrint('🔥 Stacktrace: $st');
       if (mounted) _showError('Google Sign-In failed: $e');
     } finally {
       if (mounted) setState(() => _isGoogleLoading = false);
@@ -133,7 +134,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: AppSpacing.xl),
 
                 Text(
-                  'Welcome Back!',
+                  'welcome'.tr(),
                   style: AppTypography.h2.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
@@ -142,7 +143,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 Text(
-                  'Login to continue protecting your crops',
+                  'login'.tr(),
                   style: AppTypography.body.copyWith(
                     color: AppColors.gray600,
                   ),
@@ -182,7 +183,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       child: Text(
-                        'Forgot Password?',
+                        'forgot_password'.tr(),
                         style: AppTypography.bodySmall.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w500,
@@ -194,7 +195,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: AppSpacing.xl),
 
                 AppButton(
-                  text: _isLoading ? 'LOGGING IN...' : 'LOGIN WITH PASSWORD',
+                  text: _isLoading ? 'loading'.tr() : 'sign_in'.tr().toUpperCase(),
                   onPressed: _isLoading || _isGoogleLoading ? null : _onLogin,
                   isLoading: _isLoading,
                 ),
@@ -215,7 +216,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 // ── Google Sign In Button ──
                 AppButton(
-                  text: _isGoogleLoading ? 'PLEASE WAIT...' : 'SIGN IN WITH GOOGLE',
+                  text: _isGoogleLoading ? 'loading'.tr().toUpperCase() : 'google_sign_in'.tr().toUpperCase(),
                   onPressed: _isLoading || _isGoogleLoading ? null : _onGoogleSignIn,
                   isLoading: _isGoogleLoading,
                   variant: AppButtonVariant.outlined,
@@ -227,7 +228,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account? ",
+                      '${'dont_have_account'.tr().split('?').first}? ',
                       style: AppTypography.bodySmall.copyWith(
                         color: AppColors.gray600,
                       ),
@@ -235,7 +236,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     GestureDetector(
                       onTap: () => context.push('/signup'),
                       child: Text(
-                        'Sign Up',
+                        'sign_up'.tr(),
                         style: AppTypography.bodySmall.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w600,

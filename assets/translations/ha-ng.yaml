@@ -1,0 +1,90 @@
+home: Gida
+profile: Bayani
+scan: Dubawa
+settings: Saituna
+language: Harshe
+change_language: Canza Harshe
+login: Shiga
+logout: Fita
+welcome: Barka da zuwa Verd
+clarity: Haske don amfanin gonarku
+ok: To
+cancel: Soke
+yes: I
+no: A'a
+save: Adana
+done: An gama
+back: Koma
+error: Kuskure
+success: Nasara
+loading: Ana lodi...
+
+# Navigation
+home: Gida
+scan: Dubawa
+profile: Bayani
+learning: Koyo
+history: Tarihi
+
+# Authentication
+sign_in: Shiga
+sign_up: Yi rijista
+email: Imel
+password: Kalmar sirri
+forgot_password: Manta kalmar sirri?
+create_account: Ƙirƙiri asusu
+create_profile: Ƙirƙiri bayani
+confirm_password: Tabbatar da kalmar sirri
+dont_have_account: Ba ka da asusu? Yi rijista
+already_have_account: Kana da asusu? Shiga
+or_continue_with: Ko ci gaba da
+google_sign_in: Shiga da Google
+
+# Form Validation
+email_required: Ana buƙatar imel
+invalid_email: Adireshin imel ba daidai
+password_required: Ana buƙatar kalmar sirri
+password_too_short: Kalmar sirri dole ta ƙunshi haruffa 6 ko fiye
+passwords_do_not_match: Kalmomin sirri ba su dace ba
+
+# Home & Dashboard
+dashboard: Allon sarrafa
+hello_user: Sannu, {name}!
+weather: Yanayi
+recent_scans: Dubawa na kwanan nan
+no_recent_scans: Babu dubawa na kwanan nan tukuna.
+start_new_scan: Fara sabon dubawa
+view_all: Duba duka
+
+# Scan Flow
+take_photo: Ɗauki hoto
+gallery: Dakin hotuna
+analyzing: Ana nazarin amfanin gona...
+diagnosis: Ganewar asali
+confidence: Yawan tabbas
+recommendations: Shawarwari
+save_scan: Adana dubawa
+scan_failed: Dubawa ta kasa
+disease_detected: An gano cuta
+healthy_plant: Tsire-tsire mai lafiya
+
+# Profile & Settings
+account_overview: Bayani kan asusu
+my_profile: Bayanina
+scan_history: Tarihin dubawa
+notifications: Sanarwa
+change_password: Canza kalmar sirri
+preferences_support: Zaɓuɓɓuka da taimako
+appearance: Bayyanar
+help_support: Taimako da tallafi
+logout_confirm: Shin kana da tabbas kana son fita?
+system: Tsari
+light: Haske
+dark: Duhu
+edit_profile: Gyara bayani
+full_name: Cikakken suna
+farm_location: Wurin gonar
+article_library: Laburaren labaran
+read_more: Karanta ƙari
+play_audio: Kunna sauti
+pause_audio: Dakatar da sauti

@@ -1,3 +1,4 @@
+import 'package:df_localization/df_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_theme.dart';
@@ -9,26 +10,27 @@ class LearningCenterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.colorScheme.surface,
       body: CustomScrollView(
         slivers: [
-          _buildAppBar(context),
+          _buildAppBar(context, theme),
           SliverPadding(
             padding: const EdgeInsets.all(AppSpacing.lg),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                _buildFeaturedArticle(context),
+                _buildFeaturedArticle(context, theme),
                 const SizedBox(height: AppSpacing.xxxl),
                 Text(
                   'Explore Categories',
                   style: AppTypography.h3.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.md),
-                _buildCategoryGrid(context),
+                _buildCategoryGrid(context, theme),
                 const SizedBox(height: AppSpacing.huge), // Bottom padding
               ]),
             ),
@@ -38,32 +40,108 @@ class LearningCenterScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  Widget _buildAppBar(BuildContext context, ThemeData theme) {
     return SliverAppBar(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: theme.colorScheme.surface,
       pinned: true,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+        icon: Icon(Icons.arrow_back, color: theme.colorScheme.onSurface),
         onPressed: () => context.pop(),
       ),
       title: Text(
-        'Learning Center',
-        style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
+        'Learning Center||article_library'.tr(),
+        style: AppTypography.h3.copyWith(color: theme.colorScheme.onSurface),
       ),
       centerTitle: true,
       actions: [
         IconButton(
-          icon: const Icon(Icons.search, color: AppColors.textPrimary),
-          onPressed: () {
-            // Future search implementation
-          },
+          icon: Icon(Icons.search, color: theme.colorScheme.onSurface),
+          onPressed: () => _showSearchSheet(context, theme),
         ),
       ],
     );
   }
 
-  Widget _buildFeaturedArticle(BuildContext context) {
+  void _showSearchSheet(BuildContext context, ThemeData theme) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: theme.colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: AppSpacing.xl,
+            right: AppSpacing.xl,
+            top: AppSpacing.xl,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + AppSpacing.xl,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.outlineVariant,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Text(
+                'Search Articles',
+                style: AppTypography.h3.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              TextField(
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: 'Search for crop diseases, pests...',
+                  prefixIcon: Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: theme.colorScheme.surfaceContainerHighest,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Text(
+                'Quick Topics',
+                style: AppTypography.bodySmall.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Wrap(
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.sm,
+                children: ['Crop Diseases', 'Pest Control', 'Soil Health', 'Irrigation']
+                    .map((topic) => ActionChip(
+                          label: Text(topic),
+                          onPressed: () => Navigator.pop(ctx),
+                        ))
+                    .toList(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildFeaturedArticle(BuildContext context, ThemeData theme) {
     return BouncingCard(
       onTap: () => context.push('/article/featured'),
       child: Container(
@@ -71,7 +149,7 @@ class LearningCenterScreen extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
           image: const DecorationImage(
-            image: AssetImage(AppAssets.onboarding1), // Reusing existing hero image
+            image: AssetImage(AppAssets.onboarding1),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black45,
@@ -129,7 +207,7 @@ class LearningCenterScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryGrid(BuildContext context) {
+  Widget _buildCategoryGrid(BuildContext context, ThemeData theme) {
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
@@ -140,6 +218,7 @@ class LearningCenterScreen extends StatelessWidget {
       children: [
         _buildCategoryCard(
           context,
+          theme: theme,
           id: 'diseases',
           title: 'Crop Diseases',
           icon: Icons.coronavirus,
@@ -147,6 +226,7 @@ class LearningCenterScreen extends StatelessWidget {
         ),
         _buildCategoryCard(
           context,
+          theme: theme,
           id: 'pests',
           title: 'Pest Control',
           icon: Icons.bug_report,
@@ -154,6 +234,7 @@ class LearningCenterScreen extends StatelessWidget {
         ),
         _buildCategoryCard(
           context,
+          theme: theme,
           id: 'soil',
           title: 'Soil Health',
           icon: Icons.grass,
@@ -161,6 +242,7 @@ class LearningCenterScreen extends StatelessWidget {
         ),
         _buildCategoryCard(
           context,
+          theme: theme,
           id: 'water',
           title: 'Irrigation',
           icon: Icons.water_drop,
@@ -172,6 +254,7 @@ class LearningCenterScreen extends StatelessWidget {
 
   Widget _buildCategoryCard(
     BuildContext context, {
+    required ThemeData theme,
     required String id,
     required String title,
     required IconData icon,
@@ -221,7 +304,7 @@ class LearningCenterScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: AppTypography.bodyLarge.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
             ),

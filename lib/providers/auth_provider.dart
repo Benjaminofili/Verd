@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:verd/data/models/user.dart';
@@ -5,6 +6,7 @@ import 'package:verd/data/repositories/auth_repository.dart';
 import 'package:verd/data/services/firebase_auth_service.dart';
 import 'package:verd/data/services/firestore_service.dart';
 import 'package:verd/data/services/local_storage.dart';
+import 'package:verd/providers/notification_provider.dart';
 
 // ─── Service-level providers ───
 
@@ -59,8 +61,24 @@ class AuthNotifier extends AsyncNotifier<AppUser?> {
   Future<void> login(String email, String password) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      return await ref.read(authRepositoryProvider).login(email, password);
+      final user = await ref.read(authRepositoryProvider).login(email, password);
+      await _handleFcmSetup(user.uid);
+      return user;
     });
+  }
+
+  Future<void> _handleFcmSetup(String uid) async {
+    try {
+      final fcm = ref.read(fcmServiceProvider);
+      final token = await fcm.init();
+      if (token != null) {
+        await ref.read(firestoreServiceProvider).saveFcmToken(uid, token);
+      }
+      // Re-sync topic subscriptions
+      await ref.read(notificationSettingsProvider.notifier).syncSubscriptions();
+    } catch (e) {
+      debugPrint('[FCM] Setup failed: $e');
+    }
   }
 
   Future<void> register({
@@ -70,11 +88,13 @@ class AuthNotifier extends AsyncNotifier<AppUser?> {
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      return await ref.read(authRepositoryProvider).register(
+      final user = await ref.read(authRepositoryProvider).register(
             name: name,
             email: email,
             password: password,
           );
+      await _handleFcmSetup(user.uid);
+      return user;
     });
   }
 

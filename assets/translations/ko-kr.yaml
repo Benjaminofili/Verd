@@ -1,0 +1,56 @@
+home: 홈
+profile: 프로필
+scan: 스캔
+settings: 설정
+language: 언어
+change_language: 언어 변경
+login: 로그인
+logout: 로그아웃
+welcome: Verd에 오신 것을 환영합니다
+clarity: 작물을 위한 명확성
+ok: 확인
+cancel: 취소
+yes: 예
+no: 아니오
+save: 저장
+done: 완료
+back: 뒤로
+error: 오류
+success: 성공
+loading: 로딩 중...
+dashboard: 대시보드
+hello_user: 안녕하세요, {name}님!
+weather: 날씨
+recent_scans: 최근 스캔
+no_recent_scans: 최근 스캔이 없습니다
+start_new_scan: 새 스캔 시작
+view_all: 모두 보기
+take_photo: 사진 찍기
+gallery: 갤러리
+analyzing: 작물 분석 중...
+diagnosis: 진단
+confidence: 신뢰도
+recommendations: 권장 사항
+save_scan: 스캔 저장
+scan_failed: 스캔 실패
+disease_detected: 질병 발견
+healthy_plant: 건강한 식물
+account_overview: 계정 개요
+my_profile: 내 프로필
+scan_history: 스캔 기록
+notifications: 알림
+change_password: 비밀번호 변경
+preferences_support: 환경설정 및 지원
+appearance: 모양
+help_support: 도움말 및 지원
+logout_confirm: 로그아웃하시겠습니까?
+system: 시스템
+light: 라이트
+dark: 다크
+edit_profile: 프로필 편집
+full_name: 전체 이름
+farm_location: 농장 위치
+article_library: 기사 라이브러리
+read_more: 더 읽기
+play_audio: 오디오 재생
+pause_audio: 오디오 일시정지

@@ -1,0 +1,109 @@
+# General UI
+app_name: Verd
+ok: Aceptar
+cancel: Cancelar
+yes: Sí
+no: No
+save: Guardar
+done: Hecho
+back: Atrás
+error: Error
+success: Éxito
+loading: Cargando...
+
+# Navigation
+home: Inicio
+scan: Escanear
+profile: Perfil
+learning: Aprender
+history: Historial
+
+# Authentication
+login: Iniciar sesión
+sign_in: Iniciar sesión
+sign_up: Registrarse
+email: Correo electrónico
+password: Contraseña
+forgot_password: ¿Olvidaste tu contraseña?
+create_account: Crear cuenta
+create_profile: Crear perfil
+confirm_password: Confirmar contraseña
+dont_have_account: ¿No tienes una cuenta? Regístrate
+already_have_account: ¿Ya tienes una cuenta? Iniciar sesión
+or_continue_with: O continuar con
+google_sign_in: Iniciar sesión con Google
+
+# Form Validation
+email_required: El correo electrónico es obligatorio
+invalid_email: Dirección de correo electrónico no válida
+password_required: La contraseña es obligatoria
+password_too_short: La contraseña debe tener al menos 6 caracteres
+passwords_do_not_match: Las contraseñas no coinciden
+
+# Home & Dashboard
+dashboard: Panel
+hello_user: ¡Hola, {name}!
+weather: Clima
+recent_scans: Escaneos recientes
+no_recent_scans: Aún no hay escaneos recientes.
+start_new_scan: Iniciar un nuevo escaneo
+view_all: Ver todo
+
+# Scan Flow
+take_photo: Tomar foto
+gallery: Galería
+analyzing: Analizando cultivo...
+diagnosis: Diagnóstico
+confidence: Confianza
+recommendations: Recomendaciones
+save_scan: Guardar escaneo
+scan_failed: Escaneo fallido
+disease_detected: Enfermedad detectada
+healthy_plant: Planta sana
+
+# Profile & Settings
+account_overview: Resumen de la cuenta
+my_profile: Mi perfil
+scan_history: Historial de escaneos
+notifications: Notificaciones
+change_password: Cambiar contraseña
+change_language: Cambiar idioma
+preferences_support: Preferencias y soporte
+appearance: Apariencia
+help_support: Ayuda y soporte
+logout: Cerrar sesión
+logout_confirm: ¿Estás seguro de que quieres cerrar sesión?
+system: Sistema
+light: Claro
+dark: Oscuro
+edit_profile: Editar perfil
+full_name: Nombre completo
+farm_location: Ubicación de la granja
+language: Idioma
+
+# Learning & Articles
+article_library: Biblioteca de artículos
+read_more: Leer más
+play_audio: Reproducir audio
+pause_audio: Pausar audio
+
+# Notificaciones
+push_notifications: Notificaciones Push
+push_notifications_desc: Recibir notificaciones en su dispositivo
+topics: Temas
+scan_results: Resultados del Escaneo
+scan_results_desc: Recibir notificaciones cuando se complete el escaneo
+learning_updates: Actualizaciones de Aprendizaje
+learning_updates_desc: Nuevos artículos y guías
+system_alerts: Alertas del Sistema
+system_alerts_desc: Actualizaciones importantes de la aplicación
+debug_tools: Herramientas de Depuración
+copy_token: Copiar Token de Registro FCM
+token_copied: Token FCM copiado al portapapeles
+all: Todo
+healthy: Saludable
+diseased: Enfermo
+back: Atrás
+done: Listo
+notifications: Notificaciones
+scan_history: Historial de Escaneo

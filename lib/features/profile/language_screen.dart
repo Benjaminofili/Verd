@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:df_localization/df_localization.dart';
 import 'package:verd/core/constants/app_theme.dart';
 
 class LanguageScreen extends StatefulWidget {
@@ -10,24 +11,26 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
-  String _selectedLanguage = 'English';
-
+  // Available supported languages mapping to our YAML files
   final List<Map<String, String>> _languages = [
-    {'name': 'English', 'nativeName': 'English'},
-    {'name': 'Spanish', 'nativeName': 'Español'},
-    {'name': 'French', 'nativeName': 'Français'},
-    {'name': 'German', 'nativeName': 'Deutsch'},
-    {'name': 'Portuguese', 'nativeName': 'Português'},
-    {'name': 'Chinese', 'nativeName': '中文'},
-    {'name': 'Japanese', 'nativeName': '日本語'},
-    {'name': 'Korean', 'nativeName': '한국어'},
-    {'name': 'Arabic', 'nativeName': 'العربية'},
-    {'name': 'Hindi', 'nativeName': 'हिन्दी'},
+    {'name': 'English', 'nativeName': 'English', 'code': 'en', 'country': 'us'},
+    {'name': 'French', 'nativeName': 'Français', 'code': 'fr', 'country': 'fr'},
+    {'name': 'Hausa', 'nativeName': 'Hausa', 'code': 'ha', 'country': 'ng'},
+    {'name': 'Spanish', 'nativeName': 'Español', 'code': 'es', 'country': 'es'},
+    {'name': 'German', 'nativeName': 'Deutsch', 'code': 'de', 'country': 'de'},
+    {'name': 'Portuguese', 'nativeName': 'Português', 'code': 'pt', 'country': 'br'},
+    {'name': 'Chinese', 'nativeName': '中文', 'code': 'zh', 'country': 'cn'},
+    {'name': 'Japanese', 'nativeName': '日本語', 'code': 'ja', 'country': 'jp'},
+    {'name': 'Korean', 'nativeName': '한국어', 'code': 'ko', 'country': 'kr'},
+    {'name': 'Arabic', 'nativeName': 'العربية', 'code': 'ar', 'country': 'sa'},
+    {'name': 'Hindi', 'nativeName': 'हिन्दी', 'code': 'hi', 'country': 'in'},
   ];
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final currentLocale = TranslationController.i.locale ?? const Locale('en', 'us');
+    
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -42,7 +45,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
           ),
         ),
         title: Text(
-          'Language',
+          'language'.tr(),
           style: AppTypography.h4.copyWith(color: theme.colorScheme.onSurface),
         ),
         centerTitle: true,
@@ -72,13 +75,14 @@ class _LanguageScreenState extends State<LanguageScreen> {
           ),
           itemBuilder: (context, index) {
             final language = _languages[index];
-            final isSelected = _selectedLanguage == language['name'];
+            final isSelected = currentLocale.languageCode == language['code'];
 
             return InkWell(
               onTap: () {
-                setState(() {
-                  _selectedLanguage = language['name']!;
-                });
+                TranslationController.i.setLocale(
+                  Locale(language['code']!, language['country']),
+                );
+                setState(() {}); // Re-render the tick icon
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(

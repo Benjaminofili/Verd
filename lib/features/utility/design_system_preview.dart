@@ -262,13 +262,11 @@ class _PreviewTile extends StatelessWidget {
   final String label;
   final Widget child;
   final String? description;
-  final bool dark;
 
   const _PreviewTile({
     required this.label,
     required this.child,
     this.description,
-    this.dark = false,
   });
 
   @override
@@ -307,10 +305,10 @@ class _PreviewTile extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(AppSpacing.lg),
           decoration: BoxDecoration(
-            color: dark ? AppColors.gray900 : AppColors.backgroundSecondary,
+            color: AppColors.backgroundSecondary,
             borderRadius: BorderRadius.circular(AppRadius.xl),
             border: Border.all(
-                color: dark ? AppColors.gray800 : AppColors.gray200),
+                color: AppColors.gray200),
           ),
           child: child,
         ),
@@ -1085,7 +1083,7 @@ class _DotsPreviewState extends State<_DotsPreview>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _c,
-      builder: (_, __) => Row(
+      builder: (_, _) => Row(
         mainAxisSize: MainAxisSize.min,
         children: List.generate(3, (i) {
           final t = ((_c.value - i / 3) % 1.0).clamp(0.0, 1.0);
@@ -1470,9 +1468,8 @@ class _ColorSwatch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = color.computeLuminance() < 0.4;
     final hexStr =
-        '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
+        '#${color.toARGB32().toRadixString(16).substring(2).toUpperCase()}';
 
     return GestureDetector(
       onTap: () {

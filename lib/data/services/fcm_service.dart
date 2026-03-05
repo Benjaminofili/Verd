@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Background message handler — must be a top-level function.
 @pragma('vm:entry-point')
@@ -10,11 +11,19 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 /// Wraps [FirebaseMessaging] for push notification management.
 class FCMService {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
 
-  /// Initialize FCM: request permission and get the device token.
-  /// Returns the FCM token (or null if permission denied).
+  /// Create a high importance channel for Android.
+  final AndroidNotificationChannel _channel = const AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    description: 'This channel is used for important agricultural alerts.',
+    importance: Importance.max,
+  );
+
+  /// Initialize FCM: request permission, setup local notifications/channels, and get token.
   Future<String?> init() async {
-    // Request permission (iOS + Android 13+)
+    // 1. Request permission (iOS + Android 13+)
     final settings = await _messaging.requestPermission(
       alert: true,
       badge: true,
@@ -27,18 +36,51 @@ class FCMService {
       return null;
     }
 
-    // Register background handler
+    // 2. Setup Local Notifications (Android Channel creation)
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      final androidPlugin = _localNotifications.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+      await androidPlugin?.createNotificationChannel(_channel);
+
+      const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const initSettings = InitializationSettings(android: androidInit);
+      await _localNotifications.initialize(initSettings);
+    }
+
+    // 3. Register background handler
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-    // Get device token
+    // 4. Get device token
     final token = await _messaging.getToken();
     debugPrint('[FCM] Device token: $token');
     return token;
   }
 
-  /// Listen for foreground messages.
+  /// Listen for foreground messages and show a local notification.
   void onForegroundMessage(void Function(RemoteMessage) handler) {
-    FirebaseMessaging.onMessage.listen(handler);
+    FirebaseMessaging.onMessage.listen((message) {
+      final notification = message.notification;
+      final android = message.notification?.android;
+
+      // If we have a notification payload, show it via local notifications on Android
+      if (notification != null && android != null && !kIsWeb) {
+        _localNotifications.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              _channel.id,
+              _channel.name,
+              channelDescription: _channel.description,
+              icon: android.smallIcon,
+            ),
+          ),
+        );
+      }
+      
+      handler(message);
+    });
   }
 
   /// Listen for when the user taps a notification from background.
@@ -56,7 +98,7 @@ class FCMService {
     await _messaging.unsubscribeFromTopic(topic);
   }
 
-  /// Listen for token refreshes — important for keeping Firestore in sync.
+  /// Listen for token refreshes.
   void onTokenRefresh(void Function(String token) handler) {
     _messaging.onTokenRefresh.listen(handler);
   }
