@@ -1,19 +1,25 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 import 'package:verd/core/constants/app_theme.dart';
 import 'package:verd/shared/widgets/app_toast.dart';
+import 'package:verd/providers/ai_provider.dart';
+import 'package:verd/providers/auth_provider.dart';
 
-class ScanScreen extends StatefulWidget {
+class ScanScreen extends ConsumerStatefulWidget {
   const ScanScreen({super.key});
 
   @override
-  State<ScanScreen> createState() => _ScanScreenState();
+  ConsumerState<ScanScreen> createState() => _ScanScreenState();
 }
 
-class _ScanScreenState extends State<ScanScreen> {
+class _ScanScreenState extends ConsumerState<ScanScreen> {
   CameraController? _cameraController;
   bool _isInit = false;
+  bool _isProcessing = false;
 
   @override
   void initState() {
@@ -40,6 +46,49 @@ class _ScanScreenState extends State<ScanScreen> {
       }
     } catch (e) {
       debugPrint("Camera Error: $e");
+  Future<void> _takeScanPicture() async {
+    if (_cameraController == null || !_cameraController!.value.isInitialized) {
+      return;
+    }
+
+    final user = ref.read(currentUserProvider);
+    if (user == null) {
+      AppToast.show(context, message: 'Please log in to use the scanner', variant: ToastVariant.error);
+      return;
+    }
+
+    setState(() => _isProcessing = true);
+
+    try {
+      final xFile = await _cameraController!.takePicture();
+      final imageFile = File(xFile.path);
+      
+      final scanId = const Uuid().v4();
+      
+      AppToast.show(context, message: 'Analyzing scan via Hybrid AI...', variant: ToastVariant.info);
+
+      final result = await ref.read(aiRoutingServiceProvider).routeScan(
+        userId: user.uid,
+        scanId: scanId,
+        image: imageFile,
+      );
+
+      if (mounted) {
+        // TODO: Navigate to Scan Results Screen with the result data
+        // For now, print status to show success
+        AppToast.show(
+          context, 
+          message: 'Analysis Complete! Engine: ${result['engine']}', 
+          variant: ToastVariant.success
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        AppToast.show(context, message: 'Error analyzing image: $e', variant: ToastVariant.error);
+        debugPrint('Scan error: $e');
+      }
+    } finally {
+      if (mounted) setState(() => _isProcessing = false);
     }
   }
 
@@ -173,13 +222,7 @@ class _ScanScreenState extends State<ScanScreen> {
                           ),
                           child: IconButton(
                             icon: const Icon(Icons.camera_alt_outlined, color: Colors.white, size: 36),
-                            onPressed: () {
-                              AppToast.show(
-                                context,
-                                message: 'AI model loading...',
-                                variant: ToastVariant.info,
-                              );
-                            },
+                            onPressed: _isProcessing ? null : _takeScanPicture,
                           ),
                         ),
                         const SizedBox(width: AppSpacing.xl),
