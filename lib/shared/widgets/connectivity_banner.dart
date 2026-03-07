@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:verd/core/constants/app_theme.dart';
@@ -122,12 +123,12 @@ class _ConnectivityBannerState extends State<ConnectivityBanner>
           ),
           child: _justReconnected
               ? _BannerContent(
-                  message: 'Back online',
+                  message: AppLocalizations.of(context)!.back_online,
                   icon: Icons.wifi,
                   backgroundColor: AppColors.success,
                 )
               : _BannerContent(
-                  message: 'No internet connection',
+                  message: AppLocalizations.of(context)!.no_internet,
                   icon: Icons.wifi_off_outlined,
                   backgroundColor: AppColors.gray900,
                   trailing: TextButton(
@@ -140,7 +141,7 @@ class _ConnectivityBannerState extends State<ConnectivityBanner>
                           horizontal: AppSpacing.md),
                       minimumSize: const Size(44, 44),
                     ),
-                    child: Text('Retry',
+                    child: Text(AppLocalizations.of(context)!.retry,
                         style: AppTypography.buttonSmall
                             .copyWith(color: Colors.white70)),
                   ),

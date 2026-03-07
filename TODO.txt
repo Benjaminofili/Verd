@@ -47,3 +47,92 @@ FCMService
  
 
 okay these are our next step
+
+Hybrid AI Scanning Architecture
+Our goal is to build a robust crop scanning feature that works deep in the African farmlands (where internet is spotty or non-existent) but leverages the massive power of Google's Gemini models when a connection is available.
+
+Core Architectural Approach: The "Hybrid Router"
+We will implement a clean AIService acts as a router. When the user takes a photo of a crop, this service will check the device's internet connection status and route the image analysis to one of two engines.
+
+1. The Online Path (Firebase + Gemini)
+When connectivity_plus detects an active internet connection:
+
+The app uploads the crop image to Firebase Storage (/scans/{uid}/{scanId}.jpg).
+The upload triggers the Multimodal Tasks with the Gemini API Firebase Extension (which we will configure).
+Gemini analyzes the image for crop type and disease, writing the structured JSON result to a Firestore document (/users/{uid}/scans/{scanId}).
+The app listens to this Firestore document in real-time and updates the UI instantly.
+2. The Offline Path (Local TFLite Model)
+When connectivity_plus detects no connection (or poor ping):
+
+The app skips the Firebase upload entirely.
+The image is passed to a locally bundled TensorFlow Lite (.tflite) model.
+The model runs inference directly on the phone's CPU/NPU.
+The result is saved to the local Hive database (for syncing later) and displayed immediately.
+Proposed Changes
+Dependencies Layer
+[MODIFY] pubspec.yaml
+Ensure connectivity_plus is added for network checking.
+Add tflite_flutter and tflite_flutter_helper (or equivalent modern ML package) for local inference.
+Infrastructure Layer
+[NEW] lib/data/services/ai_routing_service.dart
+A high-level service that depends on connectivity_plus to determine which AI engine to trigger based on network state.
+
+[NEW] lib/data/services/local_ml_service.dart
+A service responsible for loading the .tflite model, converting images to byte arrays, and running local device inference.
+
+Feature Layer (Camera / Scanning)
+[MODIFY] lib/features/scanning/scanner_screen.dart (or equivalent)
+Update the camera capture flow to push the taken image to the ai_routing_service and display a dynamic loading state ("Consulting Gemini..." vs "Running Local Scan...").
+
+User Review Required
+IMPORTANT
+
+TFLite Model Requirement: To build the Offline Path, we need a trained .tflite model capable of identifying crops/diseases.
+
+My question for you: Do you already have a trained TensorFlow/TFLite model ready to use, or should we use a pre-trained open-source classification model as a placeholder for the hackathon?
+one is in development by another team member 
+
+Verification Plan
+Automated/Manual Testing
+Online Test: Turn on Wi-Fi, take a picture, and verify the record is created in Firebase and analyzed by Gemini.
+Offline Test: Put the phone in Airplane Mode, take a picture, and verify the app successfully runs the local model and saves the offline record.
+
+
+we may need to create a new page where the result will be shown to the user and we need to start on the extenstion
+
+Configure extension
+Gemini API Provider
+Google AI
+Gemini model
+gemini-2.5-flash
+Google AI API Key (Optional)
+Firestore Collection Path
+generate
+Prompt
+Image field (Gemini Vision Models ONLY) (Optional)
+Response Field
+output
+Cloud Functions location
+This parameter cannot be reconfigured after installation.
+Vertex AI API Location (Optional)
+Same as Cloud Functions Location (default)
+Temperature (Optional)
+Nucleus sampling probability (Optional)
+Sampling strategy parameter (Optional)
+Candidate count (Optional)
+1
+Candidates field (Optional)
+candidates
+Hate Speech Threshold (Optional)
+Default
+Dangerous Content Threshold (Optional)
+Default
+Harassment Content Threshold (Optional)
+Default
+Sexual Content Threshold (Optional)
+Default
+note:
+Configure advanced parameters
+note:
+Terms of service
+By installing this extension you agree to the Firebase Extensions User Terms of Service

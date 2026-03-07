@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:df_localization/df_localization.dart';
 import 'package:verd/core/constants/app_theme.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:verd/core/providers/locale_provider.dart';
 
-class LanguageScreen extends StatefulWidget {
+class LanguageScreen extends ConsumerStatefulWidget {
   const LanguageScreen({super.key});
 
   @override
-  State<LanguageScreen> createState() => _LanguageScreenState();
+  ConsumerState<LanguageScreen> createState() => _LanguageScreenState();
 }
 
-class _LanguageScreenState extends State<LanguageScreen> {
+class _LanguageScreenState extends ConsumerState<LanguageScreen> {
   // Available supported languages mapping to our YAML files
   final List<Map<String, String>> _languages = [
     {'name': 'English', 'nativeName': 'English', 'code': 'en', 'country': 'us'},
@@ -29,7 +30,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final currentLocale = TranslationController.i.locale ?? const Locale('en', 'us');
+    final currentLocale = ref.watch(localeProvider);
     
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -45,7 +46,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
           ),
         ),
         title: Text(
-          'language'.tr(),
+          'language',
           style: AppTypography.h4.copyWith(color: theme.colorScheme.onSurface),
         ),
         centerTitle: true,
@@ -79,10 +80,10 @@ class _LanguageScreenState extends State<LanguageScreen> {
 
             return InkWell(
               onTap: () {
-                TranslationController.i.setLocale(
+                ref.read(localeProvider.notifier).setLocale(
                   Locale(language['code']!, language['country']),
                 );
-                setState(() {}); // Re-render the tick icon
+                                setState(() {});
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(

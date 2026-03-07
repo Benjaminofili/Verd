@@ -61,6 +61,7 @@ class AppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isActive = !isLoading && !isDisabled && onPressed != null;
     final Color baseColor = customColor ?? AppColors.primary;
+    final cs = Theme.of(context).colorScheme;
 
     final loaderColor = variant == AppButtonVariant.primary
         ? AppColors.textWhite
@@ -140,18 +141,19 @@ class AppButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadius.button),
         ),
       ),
+      // Outlined: uses theme colors so it is visible in both light & dark mode
       AppButtonVariant.outlined => ElevatedButton.styleFrom(
-        backgroundColor: Colors.transparent,
-        foregroundColor: AppColors.textPrimary,
-        disabledBackgroundColor: Colors.transparent,
-        disabledForegroundColor: AppColors.gray400,
+        backgroundColor: cs.surface,
+        foregroundColor: cs.onSurface,
+        disabledBackgroundColor: cs.surface,
+        disabledForegroundColor: cs.onSurfaceVariant,
         padding: _padding(context),
         elevation: 0,
         shadowColor: Colors.transparent,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         side: BorderSide(
-          color: isActive ? AppColors.gray300 : AppColors.gray200,
-          width: 1,
+          color: isActive ? cs.outline : cs.outlineVariant,
+          width: 1.5,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.button),

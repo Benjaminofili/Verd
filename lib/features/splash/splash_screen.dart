@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                     // Tagline
                     Text(
-                      'CLARITY FOR YOUR CROPS',
+                      AppLocalizations.of(context)!.splash_tagline,
                       style: AppTypography.body.copyWith(
                         color: isDark ? AppColors.primary200 : AppColors.gray700,
                         fontSize: 13,
@@ -122,7 +123,7 @@ class _SplashScreenState extends State<SplashScreen>
                     Padding(
                       padding: const EdgeInsets.only(bottom: 48),
                       child: Text(
-                        'powered by an offline AI',
+                        AppLocalizations.of(context)!.splash_powered,
                         style: AppTypography.bodySmall.copyWith(
                           color: isDark ? AppColors.primary200.withValues(alpha: 0.7) : AppColors.gray600,
                           fontSize: 13,

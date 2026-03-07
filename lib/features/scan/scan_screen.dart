@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
@@ -46,6 +47,9 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
       }
     } catch (e) {
       debugPrint("Camera Error: $e");
+    }
+  }
+
   Future<void> _takeScanPicture() async {
     if (_cameraController == null || !_cameraController!.value.isInitialized) {
       return;
@@ -53,7 +57,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
 
     final user = ref.read(currentUserProvider);
     if (user == null) {
-      AppToast.show(context, message: 'Please log in to use the scanner', variant: ToastVariant.error);
+      AppToast.show(context, message: AppLocalizations.of(context)!.please_log_in_scanner, variant: ToastVariant.error);
       return;
     }
 
@@ -64,9 +68,8 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
       final imageFile = File(xFile.path);
       
       final scanId = const Uuid().v4();
-      
-      AppToast.show(context, message: 'Analyzing scan via Hybrid AI...', variant: ToastVariant.info);
 
+      // Route the scan through the AI service (handles online Gemini Extension & offline TFLite)
       final result = await ref.read(aiRoutingServiceProvider).routeScan(
         userId: user.uid,
         scanId: scanId,
@@ -74,12 +77,11 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
       );
 
       if (mounted) {
-        // TODO: Navigate to Scan Results Screen with the result data
-        // For now, print status to show success
-        AppToast.show(
-          context, 
-          message: 'Analysis Complete! Engine: ${result['engine']}', 
-          variant: ToastVariant.success
+        AppToast.show(context, message: AppLocalizations.of(context)!.analysis_complete, variant: ToastVariant.info);
+        context.pushNamed(
+          'scan_result',
+          extra: result,
+          queryParameters: {'image_url': result['imageUrl'] ?? ''},
         );
       }
     } catch (e) {
@@ -145,7 +147,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Text(
-                      'Position crop within frame',
+                      AppLocalizations.of(context)!.position_crop_instruction,
                       style: AppTypography.body.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -206,7 +208,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
                           onPressed: () {
                             AppToast.show(
                               context,
-                              message: 'Upload coming soon',
+                              message: AppLocalizations.of(context)!.upload_coming_soon,
                               variant: ToastVariant.info,
                             );
                           },
@@ -220,10 +222,15 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
                             color: Color(0xFF4CAF50),
                             shape: BoxShape.circle,
                           ),
-                          child: IconButton(
-                            icon: const Icon(Icons.camera_alt_outlined, color: Colors.white, size: 36),
-                            onPressed: _isProcessing ? null : _takeScanPicture,
-                          ),
+                          child: _isProcessing
+                              ? const Padding(
+                                  padding: EdgeInsets.all(22.0),
+                                  child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3),
+                                )
+                              : IconButton(
+                                  icon: const Icon(Icons.camera_alt_outlined, color: Colors.white, size: 36),
+                                  onPressed: _takeScanPicture,
+                                ),
                         ),
                         const SizedBox(width: AppSpacing.xl),
                         _buildCircularIconButton(
@@ -240,6 +247,31 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
               ),
             ),
           ),
+          // ── Analyzing Overlay ──
+          if (_isProcessing)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withValues(alpha: 0.6),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const CircularProgressIndicator(color: Colors.white),
+                      const SizedBox(height: AppSpacing.lg),
+                      Text(
+                        AppLocalizations.of(context)!.analyzing_crop,
+                        style: AppTypography.h3.copyWith(color: Colors.white),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      Text(
+                        AppLocalizations.of(context)!.analyzing_delay_desc,
+                        style: AppTypography.body.copyWith(color: Colors.white70),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );

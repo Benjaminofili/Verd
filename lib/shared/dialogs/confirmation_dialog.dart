@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:verd/core/constants/app_theme.dart';
 
@@ -70,8 +71,8 @@ class ConfirmationDialog extends StatelessWidget {
       title: 'Delete $itemName?',
       message: customMessage ??
           'This action cannot be undone. "$itemName" will be permanently deleted.',
-      confirmLabel: 'Delete',
-      cancelLabel: 'Cancel',
+      confirmLabel: AppLocalizations.of(context)!.delete,
+      cancelLabel: AppLocalizations.of(context)!.cancel,
       isDangerous: true,
       icon: const Icon(Icons.delete_outline, color: AppColors.error, size: 32),
     );
@@ -81,10 +82,10 @@ class ConfirmationDialog extends StatelessWidget {
   static Future<bool?> logout(BuildContext context) {
     return show(
       context,
-      title: 'Log Out?',
-      message: 'You will need to sign in again to access your account.',
-      confirmLabel: 'Log Out',
-      cancelLabel: 'Stay',
+      title: AppLocalizations.of(context)!.logout_q,
+      message: AppLocalizations.of(context)!.logout_desc,
+      confirmLabel: AppLocalizations.of(context)!.logout,
+      cancelLabel: AppLocalizations.of(context)!.stay,
       isDangerous: false,
       icon: const Icon(Icons.logout_outlined,
           color: AppColors.textSecondary, size: 32),
@@ -95,10 +96,10 @@ class ConfirmationDialog extends StatelessWidget {
   static Future<bool?> discardChanges(BuildContext context) {
     return show(
       context,
-      title: 'Discard Changes?',
-      message: 'Your unsaved changes will be lost.',
-      confirmLabel: 'Discard',
-      cancelLabel: 'Keep Editing',
+      title: AppLocalizations.of(context)!.discard_changes_q,
+      message: AppLocalizations.of(context)!.discard_changes_desc,
+      confirmLabel: AppLocalizations.of(context)!.discard,
+      cancelLabel: AppLocalizations.of(context)!.keep_editing,
       isDangerous: true,
     );
   }

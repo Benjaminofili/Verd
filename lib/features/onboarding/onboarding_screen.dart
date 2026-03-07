@@ -1,5 +1,5 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_assets.dart';
 import 'package:verd/core/constants/app_theme.dart';
@@ -17,22 +17,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
 
-  final List<_OnboardingPageData> _pages = [
+  List<_OnboardingPageData> get _pages => [
     _OnboardingPageData(
-      title: 'Scan Your Crops',
-      description: 'Just take a photo. VERD checks your plant instantly.',
+      title: AppLocalizations.of(context)!.scan_crops_title,
+      description: AppLocalizations.of(context)!.scan_crops_desc,
       imagePath: AppAssets.onboarding1,
       showLogo: true,
     ),
     _OnboardingPageData(
-      title: 'Get Clear Insights',
-      description: 'Know if your crop is healthy, sick, or lacking nutrients',
+      title: AppLocalizations.of(context)!.get_insights_title,
+      description: AppLocalizations.of(context)!.get_insights_desc,
       imagePath: AppAssets.onboarding2,
       showLogo: false,
     ),
     _OnboardingPageData(
-      title: 'Take Smart Action',
-      description: 'Get clear steps to protect your farm and grow more.',
+      title: AppLocalizations.of(context)!.take_action_title,
+      description: AppLocalizations.of(context)!.take_action_desc,
       imagePath: AppAssets.onboarding3,
       showLogo: false,
     ),
@@ -98,8 +98,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 children: [
                   AppButton(
                     text: _currentIndex == _pages.length - 1
-                        ? 'GET STARTED'
-                        : 'NEXT',
+                        ? AppLocalizations.of(context)!.get_started
+                        : AppLocalizations.of(context)!.next,
                     onPressed: _onNextPressed,
                   ),
                   const SizedBox(height: AppSpacing.lg),
@@ -119,6 +119,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildTopBar() {
+    // ignore: unused_local_variable
     final showLogo = _pages[_currentIndex].showLogo;
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -130,29 +131,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          if (showLogo)
-            Column(
-              children: [
-                SvgPicture.asset(AppAssets.logoSvg, height: 40),
-                const SizedBox(height: 4),
-                Text(
-                  'WELCOME!',
-                  style: TextStyle(
-                    fontFamily: AppTypography.primaryFont,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 0.5,
-                    color: colorScheme.onSurface,
-                  ),
-                ),
-              ],
-            ),
+          // if (showLogo)
+          //   Column(
+          //     children: [
+          //       SvgPicture.asset(AppAssets.logoSvg, height: 40),
+          //       const SizedBox(height: 4),
+          //       Text(
+          //         'WELCOME!',
+          //         style: TextStyle(
+          //           fontFamily: AppTypography.primaryFont,
+          //           fontSize: 20,
+          //           fontWeight: FontWeight.bold,
+          //           letterSpacing: 0.5,
+          //           color: colorScheme.onSurface,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: _finishOnboarding,
               child: Text(
-                'Skip',
+                AppLocalizations.of(context)!.skip,
                 style: AppTypography.body.copyWith(
                   color: colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w500,

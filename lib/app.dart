@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:df_localization/df_localization.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'core/constants/app_theme.dart';
 import 'core/providers/theme_provider.dart';
+import 'core/providers/locale_provider.dart';
 import 'core/router/app_router.dart';
 import 'providers/notification_provider.dart';
 import 'shared/widgets/app_toast.dart';
@@ -16,21 +18,28 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeProvider);
     final router = ref.watch(appRouterProvider);
+    final locale = ref.watch(localeProvider);
 
-    return ValueListenableBuilder<Locale>(
-      valueListenable: TranslationController.i.pLocale,
-      builder: (context, locale, child) {
-        return MaterialApp.router(
-          title: 'VERD',
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: themeMode,
-          locale: locale,
-          routerConfig: router,
-          debugShowCheckedModeBanner: false,
-          builder: (context, child) => _FCMHandler(child: child!),
-        );
-      },
+    return MaterialApp.router(
+      title: 'VERD',
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
+      locale: locale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('fr'),
+        Locale('es'),
+      ],
+      routerConfig: router,
+      debugShowCheckedModeBanner: false,
+      builder: (context, child) => _FCMHandler(child: child!),
     );
   }
 }
@@ -82,11 +91,6 @@ class _FCMHandlerState extends ConsumerState<_FCMHandler> {
 
   /// Reads the `route` key from the notification's data payload.
   /// Falls back to `/home` if not provided.
-  /// 
-  /// Example FCM payload:
-  /// ```json
-  /// { "data": { "route": "/scan-history" } }
-  /// ```
   void _navigateFromMessage(RemoteMessage message) {
     final route = message.data['route'] as String? ?? '/home';
     navigatorKey.currentContext?.go(route);

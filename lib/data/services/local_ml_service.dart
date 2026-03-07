@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 
 /// Simulates a local Machine Learning model for offline crop analysis.
 /// 
@@ -9,9 +10,16 @@ class LocalMLService {
   /// 
   /// Returns a JSON-like map containing the structured analysis results.
   Future<Map<String, dynamic>> analyzeCropOffline(File image) async {
+    // Enforce API 26 minimum for TFLite offline inference
+    if (Platform.isAndroid) {
+      final deviceInfo = DeviceInfoPlugin();
+      final androidInfo = await deviceInfo.androidInfo;
+      if (androidInfo.version.sdkInt < 26) {
+        throw Exception('Offline AI scanning requires Android 8.0+. Please connect to WiFi/Data to use Cloud AI instead.');
+      }
+    }
+
     // TODO: Implement actual TFLite inference here when the model is ready.
-    // final interpreter = await Interpreter.fromAsset('assets/models/crop_model.tflite');
-    // final output = interpreter.run(input);
     
     // Simulate processing time 
     await Future.delayed(const Duration(seconds: 2));

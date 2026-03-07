@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -78,7 +79,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     final location = _locationController.text.trim();
 
     if (name.isEmpty) {
-      AppToast.show(context, message: 'Name cannot be empty', variant: ToastVariant.error);
+      AppToast.show(context, message: AppLocalizations.of(context)!.name_empty_error, variant: ToastVariant.error);
       return;
     }
 
@@ -92,12 +93,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         photoFile: _pickedImageFile,
       );
       if (mounted) {
-        AppToast.show(context, message: 'Profile updated successfully', variant: ToastVariant.success);
+        AppToast.show(context, message: AppLocalizations.of(context)!.profile_update_success, variant: ToastVariant.success);
         context.pop();
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, message: 'Failed to update profile. Please try again.', variant: ToastVariant.error);
+        AppToast.show(context, message: AppLocalizations.of(context)!.profile_update_error, variant: ToastVariant.error);
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -123,12 +124,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         leading: TextButton(
           onPressed: _handleCancel,
           child: Text(
-            'Cancel',
+            AppLocalizations.of(context)!.cancel,
             style: AppTypography.buttonSmall.copyWith(color: theme.colorScheme.primary),
           ),
         ),
         title: Text(
-          'Edit Profile',
+          AppLocalizations.of(context)!.edit_profile,
           style: AppTypography.h4.copyWith(color: theme.colorScheme.onSurface),
         ),
         centerTitle: true,
@@ -145,7 +146,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               : TextButton(
                   onPressed: _handleSave,
                   child: Text(
-                    'Save',
+                    AppLocalizations.of(context)!.save,
                     style: AppTypography.buttonSmall.copyWith(color: theme.colorScheme.primary),
                   ),
                 ),
@@ -185,7 +186,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             if (_pickedImageFile != null) ...[
               const SizedBox(height: AppSpacing.sm),
               Text(
-                'New photo selected — tap Save to apply',
+                AppLocalizations.of(context)!.new_photo_selected,
                 style: AppTypography.caption.copyWith(color: theme.colorScheme.primary),
                 textAlign: TextAlign.center,
               ),
@@ -194,28 +195,27 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
             // ── Edit Fields ──
             AppTextField(
-              label: 'Full Name',
-              hint: 'Your full name',
+              label: AppLocalizations.of(context)!.full_name,
+              hint: AppLocalizations.of(context)!.full_name_hint,
               controller: _nameController,
             ),
             const SizedBox(height: AppSpacing.xl),
-            AppTextField.email(
-              label: 'Email',
-              hint: 'your@email.com',
+            AppTextField.email(label: AppLocalizations.of(context)!.email,
+              hint: AppLocalizations.of(context)!.email_hint,
               controller: _emailController,
               enabled: false, // Email cannot be changed here
             ),
             const SizedBox(height: AppSpacing.xl),
             AppTextField(
-              label: 'Phone Number',
-              hint: '+1 234 567 8900',
+              label: AppLocalizations.of(context)!.phone_number,
+              hint: AppLocalizations.of(context)!.phone_hint,
               controller: _phoneController,
               keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: AppSpacing.xl),
             AppTextField(
-              label: 'Farm Location',
-              hint: 'e.g. Kumasi, Ghana',
+              label: AppLocalizations.of(context)!.farm_location,
+              hint: AppLocalizations.of(context)!.farm_location_hint,
               controller: _locationController,
               textInputAction: TextInputAction.done,
             ),

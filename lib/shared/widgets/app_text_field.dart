@@ -122,7 +122,7 @@ class AppTextField extends StatefulWidget {
     return AppTextField(
       key: key,
       label: label ?? 'Email',
-      hint: hint ?? 'your.email@example.com',
+      hint: hint ?? 'Enter your email',
       errorText: errorText,
       controller: controller,
       focusNode: focusNode,

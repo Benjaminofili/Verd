@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +7,6 @@ import 'package:verd/core/constants/app_theme.dart';
 import 'package:verd/shared/widgets/app_card.dart';
 import 'package:verd/providers/notification_provider.dart';
 import 'package:verd/providers/settings_provider.dart';
-import 'package:df_localization/df_localization.dart';
 
 class NotificationSettingsScreen extends ConsumerWidget {
   const NotificationSettingsScreen({super.key});
@@ -26,12 +26,12 @@ class NotificationSettingsScreen extends ConsumerWidget {
             Navigator.of(context).pop();
           },
           child: Text(
-            'Back||back'.tr(),
+            AppLocalizations.of(context)!.back,
             style: AppTypography.buttonSmall.copyWith(color: AppColors.primary),
           ),
         ),
         title: Text(
-          'Notifications||notifications'.tr(),
+          AppLocalizations.of(context)!.notifications,
           style: AppTypography.h4.copyWith(color: theme.colorScheme.onSurface),
         ),
         centerTitle: true,
@@ -39,7 +39,7 @@ class NotificationSettingsScreen extends ConsumerWidget {
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
-              'Done||done'.tr(),
+              AppLocalizations.of(context)!.done,
               style: AppTypography.buttonSmall.copyWith(color: AppColors.primary),
             ),
           ),
@@ -52,8 +52,8 @@ class NotificationSettingsScreen extends ConsumerWidget {
           children: [
             _buildToggleItem(
               context: context,
-              title: 'Push Notifications||push_notifications'.tr(),
-              subtitle: 'Enable or disable push notifications||push_notifications_desc'.tr(),
+              title: AppLocalizations.of(context)!.push_notifications,
+              subtitle: AppLocalizations.of(context)!.push_notifications_desc,
               value: settingsNotifier.notificationsEnabled,
               onChanged: (val) async {
                 if (val) {
@@ -69,7 +69,7 @@ class NotificationSettingsScreen extends ConsumerWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Topics||topics'.tr(),
+                  AppLocalizations.of(context)!.topics,
                   style: AppTypography.h4.copyWith(
                     fontSize: 18,
                     color: theme.colorScheme.primary,
@@ -79,24 +79,24 @@ class NotificationSettingsScreen extends ConsumerWidget {
             ),
             _buildToggleItem(
               context: context,
-              title: 'Scan Results||scan_results'.tr(),
-              subtitle: 'Get notified when your scan is complete||scan_results_desc'.tr(),
+              title: AppLocalizations.of(context)!.scan_results,
+              subtitle: AppLocalizations.of(context)!.scan_results_desc,
               value: topics[FcmTopics.scanResults] ?? false,
               onChanged: (val) => notifier.toggleTopic(FcmTopics.scanResults, val),
               enabled: settingsNotifier.notificationsEnabled,
             ),
             _buildToggleItem(
               context: context,
-              title: 'Learning Updates||learning_updates'.tr(),
-              subtitle: 'New articles and learning tips||learning_updates_desc'.tr(),
+              title: AppLocalizations.of(context)!.learning_updates,
+              subtitle: AppLocalizations.of(context)!.learning_updates_desc,
               value: topics[FcmTopics.learningUpdates] ?? false,
               onChanged: (val) => notifier.toggleTopic(FcmTopics.learningUpdates, val),
               enabled: settingsNotifier.notificationsEnabled,
             ),
             _buildToggleItem(
               context: context,
-              title: 'System Alerts||system_alerts'.tr(),
-              subtitle: 'Important system and security updates||system_alerts_desc'.tr(),
+              title: AppLocalizations.of(context)!.system_alerts,
+              subtitle: AppLocalizations.of(context)!.system_alerts_desc,
               value: topics[FcmTopics.systemAlerts] ?? false,
               onChanged: (val) => notifier.toggleTopic(FcmTopics.systemAlerts, val),
               enabled: settingsNotifier.notificationsEnabled,
@@ -104,8 +104,8 @@ class NotificationSettingsScreen extends ConsumerWidget {
             const Divider(height: AppSpacing.xl),
             _buildToggleItem(
               context: context,
-              title: 'Email Notifications',
-              subtitle: 'Receive updates via email',
+              title: AppLocalizations.of(context)!.email_notifications,
+              subtitle: AppLocalizations.of(context)!.email_notifications_desc,
               value: true, // Mocked for now
               onChanged: (val) {},
               enabled: true,
@@ -117,7 +117,7 @@ class NotificationSettingsScreen extends ConsumerWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Debug Tools||debug_tools'.tr(),
+                    AppLocalizations.of(context)!.debug_tools,
                     style: AppTypography.h4.copyWith(
                       fontSize: 18,
                       color: theme.colorScheme.primary,
@@ -133,7 +133,7 @@ class NotificationSettingsScreen extends ConsumerWidget {
                     await Clipboard.setData(ClipboardData(text: token));
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Token copied to clipboard||token_copied'.tr())),
+                        SnackBar(content: Text(AppLocalizations.of(context)!.token_copied)),
                       );
                     }
                   }
@@ -144,14 +144,14 @@ class NotificationSettingsScreen extends ConsumerWidget {
                     color: theme.brightness == Brightness.dark ? AppColors.errorLight : AppColors.error,
                   ),
                   title: Text(
-                    'Copy FCM Token||copy_token'.tr(),
+                    AppLocalizations.of(context)!.copy_token,
                     style: AppTypography.bodyLarge.copyWith(
                       fontWeight: AppTypography.medium,
                       color: theme.colorScheme.onSurface,
                     ),
                   ),
                   subtitle: Text(
-                    'Use this to send test messages from Firebase Console',
+                    AppLocalizations.of(context)!.debug_token_desc,
                     style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
                   ),
                 ),

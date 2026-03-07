@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +10,6 @@ import 'package:verd/data/services/firebase_auth_service.dart';
 import 'package:verd/providers/auth_provider.dart';
 import 'package:verd/shared/widgets/app_button.dart';
 import 'package:verd/shared/widgets/app_text_field.dart';
-import 'package:df_localization/df_localization.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -38,7 +38,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final password = _passwordController.text;
 
     if (email.isEmpty || password.isEmpty) {
-      _showError('Please fill in all fields.');
+      _showError(AppLocalizations.of(context)!.fill_all_fields);
       return;
     }
 
@@ -50,7 +50,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     } on FirebaseAuthException catch (e) {
       if (mounted) _showError(FirebaseAuthService.friendlyErrorMessage(e.code));
     } catch (e) {
-      if (mounted) _showError('An unexpected error occurred. Please try again.');
+      if (mounted) _showError(AppLocalizations.of(context)!.unexpected_error);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -82,7 +82,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<void> _onSendEmailLink() async {
     final email = _emailController.text.trim();
     if (email.isEmpty) {
-      _showError('Please enter your email to receive a sign-in link.');
+      _showError(AppLocalizations.of(context)!.enter_email_link_error);
       return;
     }
 
@@ -101,7 +101,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     } on FirebaseAuthException catch (e) {
       if (mounted) _showError(FirebaseAuthService.friendlyErrorMessage(e.code));
     } catch (e) {
-      if (mounted) _showError('Failed to send link. Please try again.');
+      if (mounted) _showError(AppLocalizations.of(context)!.send_link_failed);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -120,8 +120,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: cs.surface,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -134,18 +135,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: AppSpacing.xl),
 
                 Text(
-                  'welcome'.tr(),
+                  'welcome',
                   style: AppTypography.h2.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: cs.onSurface,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 Text(
-                  'login'.tr(),
+                  'login',
                   style: AppTypography.body.copyWith(
-                    color: AppColors.gray600,
+                    color: cs.onSurfaceVariant,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -153,8 +154,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 AppTextField.email(controller: _emailController),
                 const SizedBox(height: AppSpacing.lg),
-                AppTextField.password(
-                  controller: _passwordController,
+                AppTextField.password(controller: _passwordController,
                   textInputAction: TextInputAction.done,
                   onSubmitted: (_) => _onLogin(),
                 ),
@@ -169,7 +169,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       child: Text(
-                        'Email me a link',
+                        AppLocalizations.of(context)!.email_me_link,
                         style: AppTypography.bodySmall.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w500,
@@ -183,7 +183,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       child: Text(
-                        'forgot_password'.tr(),
+                        'forgot_password',
                         style: AppTypography.bodySmall.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w500,
@@ -195,7 +195,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: AppSpacing.xl),
 
                 AppButton(
-                  text: _isLoading ? 'loading'.tr() : 'sign_in'.tr().toUpperCase(),
+                  text: _isLoading ? 'loading' : 'sign_in'.toUpperCase(),
                   onPressed: _isLoading || _isGoogleLoading ? null : _onLogin,
                   isLoading: _isLoading,
                 ),
@@ -204,19 +204,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 // ── OR Divider ──
                 Row(
                   children: [
-                    const Expanded(child: Divider(color: AppColors.gray200, thickness: 1)),
+                    Expanded(child: Divider(color: cs.outlineVariant, thickness: 1)),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-                      child: Text('OR', style: AppTypography.bodySmall.copyWith(color: AppColors.gray500, fontWeight: FontWeight.bold)),
+                      child: Text(AppLocalizations.of(context)!.orDivider, style: AppTypography.bodySmall.copyWith(color: cs.onSurfaceVariant, fontWeight: FontWeight.bold)),
                     ),
-                    const Expanded(child: Divider(color: AppColors.gray200, thickness: 1)),
+                    Expanded(child: Divider(color: cs.outlineVariant, thickness: 1)),
                   ],
                 ),
                 const SizedBox(height: AppSpacing.lg),
 
                 // ── Google Sign In Button ──
                 AppButton(
-                  text: _isGoogleLoading ? 'loading'.tr().toUpperCase() : 'google_sign_in'.tr().toUpperCase(),
+                  text: _isGoogleLoading ? 'loading'.toUpperCase() : 'google_sign_in'.toUpperCase(),
                   onPressed: _isLoading || _isGoogleLoading ? null : _onGoogleSignIn,
                   isLoading: _isGoogleLoading,
                   variant: AppButtonVariant.outlined,
@@ -228,15 +228,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${'dont_have_account'.tr().split('?').first}? ',
+                      '${'dont_have_account'.split('?').first}? ',
                       style: AppTypography.bodySmall.copyWith(
-                        color: AppColors.gray600,
+                        color: cs.onSurfaceVariant,
                       ),
                     ),
                     GestureDetector(
                       onTap: () => context.push('/signup'),
                       child: Text(
-                        'sign_up'.tr(),
+                        'sign_up',
                         style: AppTypography.bodySmall.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w600,

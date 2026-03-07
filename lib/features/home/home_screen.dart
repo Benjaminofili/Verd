@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_theme.dart';
@@ -53,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Welcome to VERD',
+                          AppLocalizations.of(context)!.welcome_to_verd,
                           style: AppTypography.h2.copyWith(
                             fontWeight: FontWeight.bold,
                             color: theme.colorScheme.onSurface,
@@ -61,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Your smart agricultural companion',
+                          AppLocalizations.of(context)!.smart_companion,
                           style: AppTypography.bodySmall.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
@@ -92,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // ── Quick Actions ──
               Text(
-                'Quick Actions',
+                AppLocalizations.of(context)!.quick_actions,
                 style: AppTypography.h3.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurface,
@@ -102,15 +103,15 @@ class _HomeScreenState extends State<HomeScreen> {
               _buildQuickActionCard(
                 iconBackgroundColor: const Color(0xFF4CAF50),
                 icon: Icons.camera_alt,
-                title: 'Scan Crop',
-                subtitle: 'Identify diseases instantly',
+                title: AppLocalizations.of(context)!.scan_crop,
+                subtitle: AppLocalizations.of(context)!.scan_crop_desc_short,
                 onTap: widget.onScanTap,
               ),
               _buildQuickActionCard(
                 iconBackgroundColor: const Color(0xFF1976D2),
                 icon: Icons.menu_book,
-                title: 'Learning Center',
-                subtitle: 'Articles & tutorials',
+                title: AppLocalizations.of(context)!.learning_center_title,
+                subtitle: AppLocalizations.of(context)!.learning_center_desc_short,
                 onTap: () {
                   context.push('/learning-center');
                 },
@@ -118,8 +119,8 @@ class _HomeScreenState extends State<HomeScreen> {
               _buildQuickActionCard(
                 iconBackgroundColor: const Color(0xFFFF9800),
                 icon: Icons.bar_chart,
-                title: 'View History',
-                subtitle: 'Track your scans',
+                title: AppLocalizations.of(context)!.view_history,
+                subtitle: AppLocalizations.of(context)!.view_history_desc_short,
                 onTap: () {
                   context.push('/scan-history');
                 },
@@ -127,8 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
               _buildQuickActionCard(
                 iconBackgroundColor: const Color(0xFF9C27B0),
                 icon: Icons.photo_library,
-                title: 'Gallery',
-                subtitle: 'Browse saved images',
+                title: AppLocalizations.of(context)!.gallery,
+                subtitle: AppLocalizations.of(context)!.gallery_desc_short,
                 onTap: () {
                   context.push('/gallery');
                 },
@@ -159,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Text(
-                        'TIP OF THE DAY',
+                        AppLocalizations.of(context)!.tip_of_the_day,
                         style: AppTypography.bodySmall.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.bold,
@@ -170,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: AppSpacing.md),
                     Text(
-                      'Early Detection Matters',
+                      AppLocalizations.of(context)!.early_detection_title,
                       style: AppTypography.h3.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -178,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      'Scan your crops regularly to catch diseases before they spread',
+                      AppLocalizations.of(context)!.early_detection_desc,
                       style: AppTypography.body.copyWith(
                         color: Colors.white.withValues(alpha: 0.9),
                         height: 1.4,
@@ -191,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // ── Popular Topics ──
               Text(
-                'Popular Topics',
+                AppLocalizations.of(context)!.popular_topics,
                 style: AppTypography.h3.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurface,
@@ -204,34 +205,34 @@ class _HomeScreenState extends State<HomeScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 mainAxisSpacing: AppSpacing.md,
                 crossAxisSpacing: AppSpacing.md,
-                childAspectRatio: 1.1,
+                childAspectRatio: 0.95,
                 children: [
                   _buildTopicCard(
                     iconBackgroundColor: const Color(0xFFE53935),
                     icon: Icons.coronavirus,
-                    title: 'Crop Diseases',
-                    subtitle: 'Common diseases',
+                    title: AppLocalizations.of(context)!.crop_diseases,
+                    subtitle: AppLocalizations.of(context)!.crop_diseases_desc_short,
                     onTap: () => context.push('/article/diseases'),
                   ),
                   _buildTopicCard(
                     iconBackgroundColor: const Color(0xFFFF9800),
                     icon: Icons.bug_report,
-                    title: 'Pest Control',
-                    subtitle: 'Identify pests',
+                    title: AppLocalizations.of(context)!.pest_control,
+                    subtitle: AppLocalizations.of(context)!.pest_control_desc_short,
                     onTap: () => context.push('/article/pests'),
                   ),
                   _buildTopicCard(
                     iconBackgroundColor: const Color(0xFF4CAF50),
                     icon: Icons.grass,
-                    title: 'Soil Health',
-                    subtitle: 'Maintain soil',
+                    title: AppLocalizations.of(context)!.soil_health,
+                    subtitle: AppLocalizations.of(context)!.soil_health_desc_short,
                     onTap: () => context.push('/article/soil'),
                   ),
                   _buildTopicCard(
                     iconBackgroundColor: const Color(0xFF2196F3),
                     icon: Icons.water_drop,
-                    title: 'Irrigation',
-                    subtitle: 'Water tips',
+                    title: AppLocalizations.of(context)!.irrigation,
+                    subtitle: AppLocalizations.of(context)!.irrigation_desc_short,
                     onTap: () => context.push('/article/water'),
                   ),
                 ],
@@ -371,6 +372,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: theme.colorScheme.onSurface,
                   ),
                   textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
                 Text(

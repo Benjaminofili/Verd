@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:go_router/go_router.dart';
+import 'package:verd/core/router/app_router.dart';
 
 /// Background message handler — must be a top-level function.
 @pragma('vm:entry-point')
@@ -85,7 +87,52 @@ class FCMService {
 
   /// Listen for when the user taps a notification from background.
   void onMessageOpenedApp(void Function(RemoteMessage) handler) {
-    FirebaseMessaging.onMessageOpenedApp.listen(handler);
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      _handleNotificationTap(message);
+      handler(message);
+    });
+  }
+
+  /// Handle notification tap and navigate to appropriate screen
+  void _handleNotificationTap(RemoteMessage message) {
+    final data = message.data;
+    final type = data['type'] as String?;
+    final router = GoRouter.of(navigatorKey.currentContext!);
+
+    switch (type) {
+      case 'scan_result':
+        final scanId = data['scan_id'] as String?;
+        final userId = data['user_id'] as String?;
+        if (scanId != null && userId != null) {
+          // Navigate to scan result screen
+          // In a real implementation, you'd fetch the scan result from Firestore
+          router.pushNamed('scan_result', extra: {
+            'scanId': scanId,
+            'userId': userId,
+            'fromNotification': true,
+          });
+        }
+        break;
+      case 'crop_alert':
+        // Navigate to learning center for crop alerts
+        router.pushNamed('learning_center');
+        break;
+      case 'profile_update':
+        // Navigate to profile screen
+        router.pushNamed('edit_profile');
+        break;
+      default:
+        // Default navigation to home
+        router.pushNamed('home');
+    }
+  }
+
+  /// Check for initial message (when app is opened from terminated state)
+  Future<void> checkInitialMessage() async {
+    final initialMessage = await _messaging.getInitialMessage();
+    if (initialMessage != null) {
+      _handleNotificationTap(initialMessage);
+    }
   }
 
   /// Subscribe to a topic (e.g., 'crop_alerts').

@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_theme.dart';
@@ -18,12 +19,12 @@ class HelpSupportScreen extends StatelessWidget {
             context.pop();
           },
           child: Text(
-            'Back',
+            AppLocalizations.of(context)!.back,
             style: AppTypography.buttonSmall.copyWith(color: AppColors.primary),
           ),
         ),
         title: Text(
-          'Help & Support',
+          AppLocalizations.of(context)!.help_support,
           style: AppTypography.h4.copyWith(color: theme.colorScheme.onSurface),
         ),
         centerTitle: true,
@@ -34,7 +35,7 @@ class HelpSupportScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Contact Us',
+              AppLocalizations.of(context)!.contact_us,
               style: AppTypography.h3.copyWith(
                 fontWeight: FontWeight.w600,
                 color: theme.colorScheme.onSurface,
@@ -44,28 +45,28 @@ class HelpSupportScreen extends StatelessWidget {
             _buildContactItem(
               context: context,
               icon: Icons.email_outlined,
-              title: 'Email Support',
+              title: AppLocalizations.of(context)!.email_support,
               subtitle: 'support@verd.app',
               onTap: () {},
             ),
             _buildContactItem(
               context: context,
               icon: Icons.phone_outlined,
-              title: 'Call Us',
+              title: AppLocalizations.of(context)!.call_us,
               subtitle: '+1 (800) 123-4567',
               onTap: () {},
             ),
             _buildContactItem(
               context: context,
               icon: Icons.chat_bubble_outline,
-              title: 'Live Chat',
-              subtitle: 'Chat with our team',
+              title: AppLocalizations.of(context)!.live_chat,
+              subtitle: AppLocalizations.of(context)!.live_chat_desc,
               onTap: () {},
             ),
             const SizedBox(height: AppSpacing.xxxl),
             
             Text(
-              'Frequently Asked Questions',
+              AppLocalizations.of(context)!.faqs,
               style: AppTypography.h3.copyWith(
                 fontWeight: FontWeight.w600,
                 color: theme.colorScheme.onSurface,
@@ -74,18 +75,18 @@ class HelpSupportScreen extends StatelessWidget {
             const SizedBox(height: AppSpacing.md),
             _buildFAQItem(
               context: context,
-              question: 'How do I scan a crop?',
-              answer: 'Go to the Scan tab, position your crop within the frame, and tap the camera button. The app will analyze the image and provide results.',
+              question: AppLocalizations.of(context)!.faq_scan_q,
+              answer: AppLocalizations.of(context)!.faq_scan_a,
             ),
             _buildFAQItem(
               context: context,
-              question: 'How accurate is the disease detection?',
-              answer: 'Our AI model has been trained on thousands of crop images and maintains a 95% accuracy rate for common crop diseases.',
+              question: AppLocalizations.of(context)!.faq_accuracy_q,
+              answer: AppLocalizations.of(context)!.faq_accuracy_a,
             ),
             _buildFAQItem(
               context: context,
-              question: 'Can I use the app offline?',
-              answer: 'Yes! Enable offline mode in settings. Previously downloaded disease data will be available for scanning.',
+              question: AppLocalizations.of(context)!.faq_offline_q,
+              answer: AppLocalizations.of(context)!.faq_offline_a,
             ),
             const SizedBox(height: AppSpacing.xxxl),
           ],

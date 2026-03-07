@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_theme.dart';
@@ -13,7 +14,7 @@ class ArticleDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     // Simulated content based on ID
-    final title = _getTitle(articleId);
+    final title = _getTitle(context, articleId);
     final icon = _getIcon(articleId);
     final color = _getColor(articleId);
 
@@ -31,23 +32,23 @@ class ArticleDetailScreen extends StatelessWidget {
               delegate: SliverChildListDelegate([
                 _buildContentChunk(
                   context,
-                  title: '1. What does it look like?',
-                  content: 'Look for small, brown spots on older leaves. These spots grow larger and look like a target with rings inside them. The leaves may turn yellow and fall off early.',
+                  title: AppLocalizations.of(context)!.article_look_q,
+                  content: AppLocalizations.of(context)!.article_look_a,
                   icon: Icons.visibility,
                 ),
                 const SizedBox(height: AppSpacing.xxl),
                 _buildContentChunk(
                   context,
-                  title: '2. Immediate Action',
-                  content: 'Remove and burn any infected leaves immediately. Do not leave them on the ground. Wash your hands and tools after touching the sick plant.',
+                  title: AppLocalizations.of(context)!.article_action_q,
+                  content: AppLocalizations.of(context)!.article_action_a,
                   icon: Icons.warning_amber_rounded,
                   isAlert: true,
                 ),
                 const SizedBox(height: AppSpacing.xxl),
                 _buildContentChunk(
                   context,
-                  title: '3. Long-term Treatment',
-                  content: 'Space your crops further apart so wind can dry the leaves. Water the soil directly, not the leaves. Use an organic copper fungicide if the problem spreads to the stems.',
+                  title: AppLocalizations.of(context)!.article_treatment_q,
+                  content: AppLocalizations.of(context)!.article_treatment_a,
                   icon: Icons.water_drop,
                 ),
                 const SizedBox(height: AppSpacing.huge),
@@ -156,7 +157,7 @@ class ArticleDetailScreen extends StatelessWidget {
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Text(
-              'Listen to this guide (Audio)',
+              AppLocalizations.of(context)!.listen_guide,
               style: AppTypography.bodyLarge.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface,
@@ -217,20 +218,20 @@ class ArticleDetailScreen extends StatelessWidget {
 
   // --- Helpers for Demo Data ---
 
-  String _getTitle(String id) {
+  String _getTitle(BuildContext ctx, String id) {
     switch (id) {
       case 'diseases':
-        return 'Crop Diseases Guide';
+        return AppLocalizations.of(ctx)!.guide_diseases;
       case 'pests':
-        return 'Pest Control Basics';
+        return AppLocalizations.of(ctx)!.guide_pests;
       case 'soil':
-        return 'Improving Soil Health';
+        return AppLocalizations.of(ctx)!.guide_soil;
       case 'water':
-        return 'Smart Irrigation';
+        return AppLocalizations.of(ctx)!.guide_water;
       case 'featured':
-        return 'Identify Fall Armyworm';
+        return AppLocalizations.of(ctx)!.guide_featured;
       default:
-        return 'Learning Topic';
+        return AppLocalizations.of(ctx)!.learning_topic;
     }
   }
 

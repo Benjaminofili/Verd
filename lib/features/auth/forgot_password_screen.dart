@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +10,6 @@ import 'package:verd/data/services/firebase_auth_service.dart';
 import 'package:verd/providers/auth_provider.dart';
 import 'package:verd/shared/widgets/app_button.dart';
 import 'package:verd/shared/widgets/app_text_field.dart';
-import 'package:df_localization/df_localization.dart';
 
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -34,7 +34,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
     final email = _emailController.text.trim();
     if (email.isEmpty) {
-      _showError('Please enter your email address.');
+      _showError(AppLocalizations.of(context)!.enter_email_error);
       return;
     }
 
@@ -44,12 +44,12 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       await ref.read(authNotifierProvider.notifier).resetPassword(email);
       if (mounted) {
         setState(() => _emailSent = true);
-        _showSuccess('Password reset email sent! Check your inbox.');
+        _showSuccess(AppLocalizations.of(context)!.password_reset_sent);
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) _showError(FirebaseAuthService.friendlyErrorMessage(e.code));
     } catch (e) {
-      if (mounted) _showError('An unexpected error occurred. Please try again.');
+      if (mounted) _showError(AppLocalizations.of(context)!.unexpected_error);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -79,8 +79,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: cs.surface,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppSpacing.xxl),
@@ -93,11 +94,11 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 alignment: Alignment.centerLeft,
                 child: TextButton.icon(
                   onPressed: () => context.pop(),
-                  icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary, size: 20),
+                  icon: Icon(Icons.arrow_back, color: cs.onSurface, size: 20),
                   label: Text(
-                    'back'.tr(),
+                    AppLocalizations.of(context)!.back,
                     style: AppTypography.body.copyWith(
-                      color: AppColors.textPrimary,
+                      color: cs.onSurface,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -120,10 +121,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
               // ── Title & Subtitle ──
               Text(
-                'forgot_password'.tr(),
+                'forgot_password',
                 style: AppTypography.h2.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: cs.onSurface,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -132,10 +133,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: Text(
                   _emailSent
-                      ? "We've sent a password reset link to your email. Check your inbox and follow the instructions."
-                      : "No worries! Enter your email and we'll send you reset instructions",
+                      ? AppLocalizations.of(context)!.password_reset_sent_desc
+                      : AppLocalizations.of(context)!.password_reset_instructions,
                   style: AppTypography.body.copyWith(
-                    color: _emailSent ? Colors.green.shade700 : AppColors.gray600,
+                    color: _emailSent ? Colors.green.shade700 : cs.onSurfaceVariant,
                     height: 1.4,
                   ),
                   textAlign: TextAlign.center,
@@ -145,14 +146,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
               // ── Form ──
               if (!_emailSent) ...[
-                AppTextField.email(
-                  controller: _emailController,
+                AppTextField.email(controller: _emailController,
                 ),
                 const SizedBox(height: 32),
 
                 // ── Reset Button ──
                 AppButton(
-                  text: _isLoading ? 'loading'.tr() : 'forgot_password'.tr().toUpperCase(),
+                  text: _isLoading ? 'loading' : 'forgot_password'.toUpperCase(),
                   onPressed: _isLoading ? null : _onResetPassword,
                   isLoading: _isLoading,
                 ),
@@ -165,7 +165,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 AppButton(
-                  text: 'BACK TO LOGIN',
+                  text: AppLocalizations.of(context)!.back_to_login,
                   onPressed: () => context.pop(),
                 ),
               ],
@@ -183,7 +183,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       ),
                     ),
                     child: Text(
-                      'back'.tr(),
+                      AppLocalizations.of(context)!.back,
                       style: AppTypography.body.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w500,

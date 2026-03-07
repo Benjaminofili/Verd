@@ -1,10 +1,10 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_theme.dart';
 import 'package:verd/shared/widgets/app_card.dart';
 import 'package:verd/shared/widgets/app_text_field.dart';
 import 'package:verd/shared/widgets/app_toast.dart';
-import 'package:df_localization/df_localization.dart';
 
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -24,7 +24,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       setState(() => _isSaving = false);
       AppToast.show(
         context,
-        message: 'Password updated successfully',
+        message: AppLocalizations.of(context)!.password_update_success,
         variant: ToastVariant.success,
       );
       context.pop();
@@ -44,12 +44,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             context.pop();
           },
           child: Text(
-            'Cancel||cancel'.tr(),
+            AppLocalizations.of(context)!.cancel,
             style: AppTypography.buttonSmall.copyWith(color: theme.colorScheme.primary),
           ),
         ),
         title: Text(
-          'Change Password||change_password'.tr(),
+          AppLocalizations.of(context)!.change_password,
           style: AppTypography.h4.copyWith(color: theme.colorScheme.onSurface),
         ),
         centerTitle: true,
@@ -66,7 +66,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             : TextButton(
                 onPressed: _handleSave,
             child: Text(
-              'Save||save'.tr(),
+              AppLocalizations.of(context)!.save,
               style: AppTypography.buttonSmall.copyWith(color: theme.colorScheme.primary),
             ),
           ),
@@ -78,19 +78,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            AppTextField.password(
-              label: 'Current Password||current_password'.tr(),
-              hint: 'Enter current password||enter_current_password'.tr(),
+            AppTextField.password(label: AppLocalizations.of(context)!.current_password,
+              hint: AppLocalizations.of(context)!.enter_current_password,
             ),
             const SizedBox(height: AppSpacing.xl),
-            AppTextField.password(
-              label: 'New Password||new_password'.tr(),
-              hint: 'Enter new password||enter_new_password'.tr(),
+            AppTextField.password(label: AppLocalizations.of(context)!.new_password,
+              hint: AppLocalizations.of(context)!.enter_new_password,
             ),
             const SizedBox(height: AppSpacing.xl),
-            AppTextField.password(
-              label: 'Confirm New Password||confirm_new_password'.tr(),
-              hint: 'Confirm new password||confirm_new_password'.tr(),
+            AppTextField.password(label: AppLocalizations.of(context)!.confirm_new_password,
+              hint: AppLocalizations.of(context)!.confirm_new_password,
               textInputAction: TextInputAction.done,
             ),
             const SizedBox(height: AppSpacing.xxl),
@@ -101,17 +98,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Password Requirements:||password_requirements'.tr(),
+                    AppLocalizations.of(context)!.password_requirements,
                     style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.bold,
                       color: theme.colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.md),
-                  _buildRequirementItem(context, 'At least 8 characters long||pwd_rule_length'.tr()),
-                  _buildRequirementItem(context, 'Contains uppercase and lowercase letters||pwd_rule_case'.tr()),
-                  _buildRequirementItem(context, 'Contains at least one number||pwd_rule_number'.tr()),
-                  _buildRequirementItem(context, 'Contains at least one special character||pwd_rule_special'.tr()),
+                  _buildRequirementItem(context, AppLocalizations.of(context)!.pwd_rule_length),
+                  _buildRequirementItem(context, AppLocalizations.of(context)!.pwd_rule_case),
+                  _buildRequirementItem(context, AppLocalizations.of(context)!.pwd_rule_number),
+                  _buildRequirementItem(context, AppLocalizations.of(context)!.pwd_rule_special),
                 ],
               ),
             ),

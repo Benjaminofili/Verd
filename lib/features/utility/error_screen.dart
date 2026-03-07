@@ -39,16 +39,16 @@ class ErrorScreen extends StatefulWidget {
   // ── Named constructors ─────────────────────────────────────────────────
 
   factory ErrorScreen.generic({
-    String title = 'Something Went Wrong',
-    String message = 'An unexpected error occurred.\nPlease try again.',
-    String retryLabel = 'Try Again',
+    String? title,
+    String? message,
+    String? retryLabel,
     VoidCallback? onRetry,
     VoidCallback? onGoHome,
   }) =>
       ErrorScreen._(
-        title: title,
-        message: message,
-        retryLabel: retryLabel,
+        title: title ?? 'Something went wrong',
+        message: message ?? 'An unexpected error occurred.',
+        retryLabel: retryLabel ?? 'Retry',
         type: _ErrorType.generic,
         secondaryLabel: onGoHome != null ? 'Go to Home' : null,
         onRetry: onRetry,
@@ -60,9 +60,8 @@ class ErrorScreen extends StatefulWidget {
     VoidCallback? onGoHome,
   }) =>
       ErrorScreen._(
-        title: 'No Internet Connection',
-        message:
-        'Please check your network settings\nand try again.',
+        title: 'No Internet',
+        message: 'Check your connection and try again.',
         retryLabel: 'Retry',
         type: _ErrorType.network,
         secondaryLabel: onGoHome != null ? 'Go to Home' : null,
@@ -76,9 +75,8 @@ class ErrorScreen extends StatefulWidget {
   }) =>
       ErrorScreen._(
         title: 'Server Error',
-        message:
-        'Our servers are experiencing issues.\nPlease try again in a moment.',
-        retryLabel: 'Try Again',
+        message: 'Our servers are having trouble. Please try again later.',
+        retryLabel: 'Retry',
         type: _ErrorType.server,
         secondaryLabel: onGoHome != null ? 'Go to Home' : null,
         onRetry: onRetry,
@@ -92,8 +90,7 @@ class ErrorScreen extends StatefulWidget {
   }) =>
       ErrorScreen._(
         title: 'Permission Required',
-        message:
-        '${featureName ?? 'This feature'} requires a permission\nthat has been denied. Please enable it\nin your device settings.',
+        message: '${featureName ?? 'This feature'} requires a permission\nthat has been denied. Please enable it\nin your device settings.||This feature',
         retryLabel: 'Open Settings',
         type: _ErrorType.permission,
         secondaryLabel: 'Go Back',

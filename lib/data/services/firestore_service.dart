@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:verd/data/models/user.dart';
 import 'package:verd/data/models/scan_result.dart';
 
@@ -53,12 +54,143 @@ class FirestoreService {
     await _scansCol(uid).doc(scan.id).set(scan.toFirestore());
   }
 
+  /// Directly updates a scan document with raw data.
+  Future<void> updateScanRaw(String uid, String scanId, Map<String, dynamic> data) async {
+    await _scansCol(uid).doc(scanId).update(data);
+  }
+
+  /// Sets (creates or overwrites) a scan document with raw data.
+  Future<void> saveScanRaw(String uid, String scanId, Map<String, dynamic> data) async {
+    await _scansCol(uid).doc(scanId).set(data);
+  }
+
   /// Get all scans for a user, ordered by most recent.
-  Future<List<ScanResult>> getUserScans(String uid) async {
+  Future<List<ScanResult>> getUserScans(String uid, {int? limit}) async {
+    var query = _scansCol(uid).orderBy('scannedAt', descending: true);
+    if (limit != null) {
+      query = query.limit(limit);
+    }
+    final snapshot = await query.get();
+    return snapshot.docs.map((doc) => ScanResult.fromFirestore(doc)).toList();
+  }
+
+  /// Listens to a scan document and waits for the Gemini Extension to populate the 'output' field.
+  Future<Map<String, dynamic>?> waitForScanAnalysis({
+    required String userId,
+    required String scanId,
+    required Duration timeout,
+  }) async {
+    try {
+      final docRef = _scansCol(userId).doc(scanId);
+
+      // Listen to the document stream
+      return await docRef.snapshots().map((snapshot) {
+        if (!snapshot.exists) return null;
+        final data = snapshot.data();
+        if (data == null) return null;
+
+        // 1. Check for success field (matches Extension config)
+        if (data.containsKey('output')) {
+          final output = data['output'];
+          
+          // Check if the output itself is a structured error from the extension
+          if (output is Map && 
+              (output['cropType'] == 'Error' || 
+               output['healthStatus']?.toString().contains('Error') == true)) {
+            return {
+              'analysis': {
+                'cropType': 'Error',
+                'healthStatus': 'Configuration Error',
+                'confidence': 0.0,
+                'diseases': [
+                  {
+                    'name': 'Extension Error',
+                    'severity': 'Critical',
+                    'treatment': output['diseases']?.first['treatment']?.toString() ?? 'Model configuration invalid.'
+                  }
+                ]
+              }
+            };
+          }
+          return data;
+        }
+
+        // 2. Check for explicit error fields
+        if (data.containsKey('error') || data.containsKey('errorMessage')) {
+          return {
+            'status': 'error',
+            'error': data['error'] ?? data['errorMessage'],
+            'analysis': {
+              'cropType': 'Error',
+              'healthStatus': 'Analysis Failed',
+              'confidence': 0.0,
+              'diseases': [
+                {
+                  'name': 'System Error',
+                  'severity': 'High',
+                  'treatment': data['error']?.toString() ?? data['errorMessage']?.toString() ?? 'Check Cloud Function logs.'
+                }
+              ]
+            }
+          };
+        }
+
+        // 3. Check for 'status' field (some versions use this for progress/error)
+        final status = data['status'];
+        if (status is Map && status.containsKey('error')) {
+           return {
+            'analysis': {
+              'cropType': 'Error',
+              'healthStatus': 'Extension Config Error',
+              'diseases': [{'name': 'Status Error', 'severity': 'Critical', 'treatment': status['error'].toString()}]
+            }
+          };
+        }
+
+        return null; // Keep waiting
+      }).firstWhere(
+        (data) => data != null,
+      ).timeout(timeout);
+    } catch (e) {
+      debugPrint('[FirestoreService] Timeout or Error waiting for analysis: $e');
+      return null;
+    }
+  }
+
+  /// Get scans for a user by crop type.
+  Future<List<ScanResult>> getCropScans(String uid, String cropType) async {
     final snapshot = await _scansCol(uid)
+        .where('plantName', isEqualTo: cropType)
         .orderBy('scannedAt', descending: true)
         .get();
     return snapshot.docs.map((doc) => ScanResult.fromFirestore(doc)).toList();
+  }
+
+  /// Update user's crop stats.
+  Future<void> updateCropStats({
+    required String userId,
+    required String cropType,
+    required String healthStatus,
+  }) async {
+    // Basic implementation for stats tracking
+    final statsRef = _usersCol.doc(userId).collection('stats').doc(cropType);
+    await _firestore.runTransaction((transaction) async {
+      final doc = await transaction.get(statsRef);
+      if (!doc.exists) {
+        transaction.set(statsRef, {
+          'cropType': cropType,
+          'totalScans': 1,
+          'healthyScans': healthStatus == 'healthy' ? 1 : 0,
+        });
+      } else {
+        final currentTotal = doc.data()?['totalScans'] ?? 0;
+        final currentHealthy = doc.data()?['healthyScans'] ?? 0;
+        transaction.update(statsRef, {
+          'totalScans': currentTotal + 1,
+          'healthyScans': healthStatus == 'healthy' ? currentHealthy + 1 : currentHealthy,
+        });
+      }
+    });
   }
 
   /// Delete a single scan.

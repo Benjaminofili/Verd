@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:verd/providers/auth_provider.dart';
+import 'package:verd/data/models/scan_result.dart';
 
 import 'package:verd/features/auth/forgot_password_screen.dart';
 import 'package:verd/features/auth/login_screen.dart';
@@ -23,10 +24,12 @@ import 'package:verd/features/profile/language_screen.dart';
 import 'package:verd/features/profile/notification_settings_screen.dart';
 import 'package:verd/features/profile/help_support_screen.dart';
 import 'package:verd/features/profile/edit_profile_screen.dart';
+import 'package:verd/features/profile/user_insights_screen.dart';
 
 // Scan screens
 import 'package:verd/features/scan/gallery_screen.dart';
 import 'package:verd/features/scan/scan_history_screen.dart';
+import 'package:verd/features/scan/scan_result_screen.dart';
 
 // Learning screens
 import 'package:verd/features/learning/learning_center_screen.dart';
@@ -44,6 +47,11 @@ class RouterNotifier extends ChangeNotifier {
       authStateProvider,
       (_, _) => notifyListeners(),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
 
@@ -157,6 +165,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const EditProfileScreen(),
       ),
       GoRoute(
+        path: '/user-insights',
+        name: 'user_insights',
+        builder: (context, state) => const UserInsightsScreen(),
+      ),
+      GoRoute(
         path: '/gallery',
         name: 'gallery',
         builder: (context, state) => const GalleryScreen(),
@@ -165,6 +178,37 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/scan-history',
         name: 'scan_history',
         builder: (context, state) => const ScanHistoryScreen(),
+      ),
+      GoRoute(
+        path: '/scan-result',
+        name: 'scan_result',
+        builder: (context, state) {
+          final extra = state.extra;
+          Map<String, dynamic> resultData = {};
+          String? imageUrl;
+
+          if (extra is ScanResult) {
+            resultData = {
+              'engine': 'gemini_cloud_extension', // Default for history
+              'timestamp': extra.scannedAt.toIso8601String(),
+              'analysis': extra.analysisMap ?? {
+                'cropType': extra.plantName,
+                'healthStatus': extra.diagnosis,
+                'confidence': extra.confidence,
+                'diseases': [], // Basic fallback
+              }
+            };
+            imageUrl = extra.imageUrl;
+          } else if (extra is Map<String, dynamic>) {
+            resultData = extra;
+            imageUrl = state.uri.queryParameters['image_url'] ?? extra['imageUrl'];
+          }
+
+          return ScanResultScreen(
+            scanResult: resultData,
+            imageUrl: imageUrl,
+          );
+        },
       ),
       GoRoute(
         path: '/learning-center',

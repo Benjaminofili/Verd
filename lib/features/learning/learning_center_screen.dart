@@ -1,4 +1,4 @@
-import 'package:df_localization/df_localization.dart';
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_theme.dart';
@@ -23,7 +23,7 @@ class LearningCenterScreen extends StatelessWidget {
                 _buildFeaturedArticle(context, theme),
                 const SizedBox(height: AppSpacing.xxxl),
                 Text(
-                  'Explore Categories',
+                  AppLocalizations.of(context)!.explore_categories,
                   style: AppTypography.h3.copyWith(
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.onSurface,
@@ -50,7 +50,7 @@ class LearningCenterScreen extends StatelessWidget {
         onPressed: () => context.pop(),
       ),
       title: Text(
-        'Learning Center||article_library'.tr(),
+        AppLocalizations.of(context)!.article_library,
         style: AppTypography.h3.copyWith(color: theme.colorScheme.onSurface),
       ),
       centerTitle: true,
@@ -95,7 +95,7 @@ class LearningCenterScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.lg),
               Text(
-                'Search Articles',
+                AppLocalizations.of(context)!.search_articles,
                 style: AppTypography.h3.copyWith(
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.onSurface,
@@ -105,7 +105,7 @@ class LearningCenterScreen extends StatelessWidget {
               TextField(
                 autofocus: true,
                 decoration: InputDecoration(
-                  hintText: 'Search for crop diseases, pests...',
+                  hintText: AppLocalizations.of(context)!.search_hint,
                   prefixIcon: Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -117,7 +117,7 @@ class LearningCenterScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.lg),
               Text(
-                'Quick Topics',
+                AppLocalizations.of(context)!.quick_topics,
                 style: AppTypography.bodySmall.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w600,
@@ -127,7 +127,12 @@ class LearningCenterScreen extends StatelessWidget {
               Wrap(
                 spacing: AppSpacing.sm,
                 runSpacing: AppSpacing.sm,
-                children: ['Crop Diseases', 'Pest Control', 'Soil Health', 'Irrigation']
+                children: [
+                  AppLocalizations.of(context)!.crop_diseases,
+                  AppLocalizations.of(context)!.pest_control,
+                  AppLocalizations.of(context)!.soil_health,
+                  AppLocalizations.of(context)!.irrigation
+                ]
                     .map((topic) => ActionChip(
                           label: Text(topic),
                           onPressed: () => Navigator.pop(ctx),
@@ -182,7 +187,7 @@ class LearningCenterScreen extends StatelessWidget {
                     const Icon(Icons.volume_up, color: Colors.white, size: 14),
                     const SizedBox(width: 4),
                     Text(
-                      'AUDIO GUIDE',
+                      AppLocalizations.of(context)!.audio_guide,
                       style: AppTypography.caption.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -220,7 +225,7 @@ class LearningCenterScreen extends StatelessWidget {
           context,
           theme: theme,
           id: 'diseases',
-          title: 'Crop Diseases',
+          title: AppLocalizations.of(context)!.crop_diseases,
           icon: Icons.coronavirus,
           color: const Color(0xFFE53935),
         ),
@@ -228,7 +233,7 @@ class LearningCenterScreen extends StatelessWidget {
           context,
           theme: theme,
           id: 'pests',
-          title: 'Pest Control',
+          title: AppLocalizations.of(context)!.pest_control,
           icon: Icons.bug_report,
           color: const Color(0xFFFF9800),
         ),
@@ -236,7 +241,7 @@ class LearningCenterScreen extends StatelessWidget {
           context,
           theme: theme,
           id: 'soil',
-          title: 'Soil Health',
+          title: AppLocalizations.of(context)!.soil_health,
           icon: Icons.grass,
           color: const Color(0xFF4CAF50),
         ),
@@ -244,7 +249,7 @@ class LearningCenterScreen extends StatelessWidget {
           context,
           theme: theme,
           id: 'water',
-          title: 'Irrigation',
+          title: AppLocalizations.of(context)!.irrigation,
           icon: Icons.water_drop,
           color: const Color(0xFF2196F3),
         ),

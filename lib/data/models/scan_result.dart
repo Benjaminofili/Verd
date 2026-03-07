@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 
@@ -36,6 +37,9 @@ class ScanResult extends HiveObject {
   @HiveField(9)
   final bool synced; // Whether this result has been uploaded to Firestore
 
+  @HiveField(10)
+  final Map<String, dynamic>? analysisMap; // Full AI analysis results for persistent display
+
   ScanResult({
     required this.id,
     required this.userId,
@@ -47,6 +51,7 @@ class ScanResult extends HiveObject {
     required this.recommendations,
     required this.scannedAt,
     this.synced = false,
+    this.analysisMap,
   });
 
   /// Whether this scan indicates a healthy plant.
@@ -56,17 +61,38 @@ class ScanResult extends HiveObject {
 
   factory ScanResult.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data()!;
+    
+    // Attempt to parse AI analysis if it exists but isn't already a Map
+    Map<String, dynamic>? analysis;
+    if (data['analysisMap'] != null) {
+      analysis = Map<String, dynamic>.from(data['analysisMap']);
+    } else if (data['output'] != null) {
+      // It's a raw Gemini Extension result
+      final dynamic output = data['output'];
+      if (output is String) {
+        try {
+          String rawJson = output.replaceAll('```json', '').replaceAll('```', '').trim();
+          analysis = jsonDecode(rawJson) as Map<String, dynamic>;
+        } catch (_) {
+          // Silent fail - we'll show "Unknown" in UI
+        }
+      } else if (output is Map) {
+        analysis = Map<String, dynamic>.from(output);
+      }
+    }
+
     return ScanResult(
       id: doc.id,
       userId: data['userId'] ?? '',
       imageUrl: data['imageUrl'],
       localImagePath: data['localImagePath'],
-      plantName: data['plantName'] ?? '',
-      diagnosis: data['diagnosis'] ?? '',
-      confidence: (data['confidence'] ?? 0.0).toDouble(),
-      recommendations: List<String>.from(data['recommendations'] ?? []),
+      plantName: analysis?['cropType'] ?? data['plantName'] ?? '',
+      diagnosis: analysis?['healthStatus'] ?? data['diagnosis'] ?? '',
+      confidence: (analysis?['confidence'] ?? data['confidence'] ?? 0.0).toDouble(),
+      recommendations: List<String>.from(analysis?['diseases']?.map((d) => d['treatment']?.toString()) ?? data['recommendations'] ?? []),
       scannedAt: (data['scannedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      synced: true, // If it's in Firestore, it's synced
+      synced: true,
+      analysisMap: analysis,
     );
   }
 
@@ -79,6 +105,7 @@ class ScanResult extends HiveObject {
       'confidence': confidence,
       'recommendations': recommendations,
       'scannedAt': Timestamp.fromDate(scannedAt),
+      'analysisMap': analysisMap,
     };
   }
 
@@ -98,6 +125,7 @@ class ScanResult extends HiveObject {
           ? DateTime.parse(json['scannedAt'])
           : DateTime.now(),
       synced: json['synced'] ?? false,
+      analysisMap: json['analysisMap'] != null ? Map<String, dynamic>.from(json['analysisMap']) : null,
     );
   }
 
@@ -113,6 +141,7 @@ class ScanResult extends HiveObject {
       'recommendations': recommendations,
       'scannedAt': scannedAt.toIso8601String(),
       'synced': synced,
+      'analysisMap': analysisMap,
     };
   }
 
@@ -129,6 +158,7 @@ class ScanResult extends HiveObject {
     List<String>? recommendations,
     DateTime? scannedAt,
     bool? synced,
+    Map<String, dynamic>? analysisMap,
   }) {
     return ScanResult(
       id: id ?? this.id,
@@ -141,6 +171,7 @@ class ScanResult extends HiveObject {
       recommendations: recommendations ?? this.recommendations,
       scannedAt: scannedAt ?? this.scannedAt,
       synced: synced ?? this.synced,
+      analysisMap: analysisMap ?? this.analysisMap,
     );
   }
 

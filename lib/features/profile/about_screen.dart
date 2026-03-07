@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:verd/core/constants/app_theme.dart';
@@ -19,12 +20,12 @@ class AboutScreen extends StatelessWidget {
             context.pop();
           },
           child: Text(
-            'Back',
+            AppLocalizations.of(context)!.back,
             style: AppTypography.buttonSmall.copyWith(color: AppColors.primary),
           ),
         ),
         title: Text(
-          'About VERD',
+          AppLocalizations.of(context)!.about_verd,
           style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
         ),
         centerTitle: true,
@@ -82,7 +83,7 @@ class AboutScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Our Mission',
+                    AppLocalizations.of(context)!.our_mission,
                     style: AppTypography.h3.copyWith(
                       fontWeight: FontWeight.bold,
                       color: theme.colorScheme.onSurface,
@@ -90,7 +91,7 @@ class AboutScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpacing.md),
                   Text(
-                    'VERD is dedicated to empowering farmers and agricultural professionals with cutting-edge AI technology to identify crop diseases early and improve crop yields. Our mission is to make agricultural expertise accessible to everyone.',
+                    AppLocalizations.of(context)!.mission_desc,
                     style: AppTypography.body.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                       height: 1.5,
@@ -109,17 +110,17 @@ class AboutScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Features',
+                    AppLocalizations.of(context)!.features,
                     style: AppTypography.h3.copyWith(
                       fontWeight: FontWeight.bold,
                       color: theme.colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.md),
-                  _buildFeatureItem(context, 'AI-powered crop disease detection'),
-                  _buildFeatureItem(context, 'Comprehensive learning resources'),
-                  _buildFeatureItem(context, 'Offline mode for remote areas'),
-                  _buildFeatureItem(context, 'History tracking and analytics'),
+                  _buildFeatureItem(context, AppLocalizations.of(context)!.feature_ai),
+                  _buildFeatureItem(context, AppLocalizations.of(context)!.feature_learning),
+                  _buildFeatureItem(context, AppLocalizations.of(context)!.feature_offline),
+                  _buildFeatureItem(context, AppLocalizations.of(context)!.feature_history),
                 ],
               ),
             ),
@@ -132,7 +133,7 @@ class AboutScreen extends StatelessWidget {
               onTap: () {
                 AppToast.show(
                   context,
-                  message: 'Terms of Service coming soon',
+                  message: AppLocalizations.of(context)!.terms_coming_soon,
                   variant: ToastVariant.info,
                 );
               },
@@ -140,7 +141,7 @@ class AboutScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Terms of Service',
+                    AppLocalizations.of(context)!.terms_of_service,
                     style: AppTypography.bodyLarge.copyWith(
                       fontWeight: FontWeight.w600,
                       color: theme.colorScheme.onSurface,

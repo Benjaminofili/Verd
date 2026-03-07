@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,7 +8,6 @@ import 'package:verd/providers/auth_provider.dart';
 
 import 'package:verd/shared/dialogs/confirmation_dialog.dart';
 import 'package:verd/shared/widgets/skeleton_loader.dart';
-import 'package:df_localization/df_localization.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -75,7 +75,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Profile||profile'.tr(), style: AppTypography.h2.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+                          Text(AppLocalizations.of(context)!.profile, style: AppTypography.h2.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
                           IconButton(
                             icon: const Icon(Icons.more_vert, color: Colors.white),
                             onPressed: () {},
@@ -105,7 +105,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                       const SizedBox(height: AppSpacing.md),
                       Text(
-                        user.displayName.isNotEmpty ? user.displayName : 'Farmer',
+                        user.displayName.isNotEmpty ? user.displayName : AppLocalizations.of(context)!.farmer,
                         style: AppTypography.h3.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -152,7 +152,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Account Overview||account_overview'.tr(),
+                            AppLocalizations.of(context)!.account_overview,
                             style: AppTypography.h3.copyWith(
                               fontWeight: FontWeight.bold,
                               color: theme.colorScheme.onSurface,
@@ -164,41 +164,48 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             theme: theme,
                             icon: Icons.person_outline,
                             iconColor: const Color(0xFF2196F3), // Light Blue
-                            title: 'My Profile||my_profile'.tr(),
+                            title: AppLocalizations.of(context)!.my_profile,
                             onTap: () => context.push('/edit-profile'),
                           ),
                           _buildMenuItem(
                             theme: theme,
                             icon: Icons.history,
                             iconColor: const Color(0xFF4CAF50), // Green 
-                            title: 'Scan History||scan_history'.tr(),
+                            title: AppLocalizations.of(context)!.scan_history,
                             onTap: () => context.push('/scan-history'),
+                          ),
+                          _buildMenuItem(
+                            theme: theme,
+                            icon: Icons.analytics_outlined,
+                            iconColor: const Color(0xFF9C27B0), // Purple
+                            title: AppLocalizations.of(context)!.farming_insights,
+                            onTap: () => context.push('/user-insights'),
                           ),
                           _buildMenuItem(
                             theme: theme,
                             icon: Icons.notifications_none,
                             iconColor: const Color(0xFFE91E63), // Pink
-                            title: 'Notifications||notifications'.tr(),
+                            title: AppLocalizations.of(context)!.notifications,
                             onTap: () => context.push('/notifications'),
                           ),
                           _buildMenuItem(
                             theme: theme,
                             icon: Icons.lock_outline,
                             iconColor: const Color(0xFFFF9800), // Orange
-                            title: 'Change Password||change_password'.tr(),
+                            title: AppLocalizations.of(context)!.change_password,
                             onTap: () => context.push('/change-password'),
                           ),
                           _buildMenuItem(
                             theme: theme,
                             icon: Icons.language,
                             iconColor: const Color(0xFF9C27B0), // Purple
-                            title: 'Change Language||change_language'.tr(),
+                            title: AppLocalizations.of(context)!.change_language,
                             onTap: () => context.push('/language'),
                           ),
 
                           const SizedBox(height: AppSpacing.xl),
                           Text(
-                            'Preferences & Support||preferences_support'.tr(),
+                            AppLocalizations.of(context)!.preferences_support,
                             style: AppTypography.h3.copyWith(
                               fontWeight: FontWeight.bold,
                               color: theme.colorScheme.onSurface,
@@ -212,7 +219,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             theme: theme,
                             icon: Icons.help_outline,
                             iconColor: const Color(0xFF00BCD4), // Cyan
-                            title: 'Help & Support||help_support'.tr(),
+                            title: AppLocalizations.of(context)!.help_support,
                             onTap: () => context.push('/help-support'),
                           ),
                           
@@ -220,11 +227,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             theme: theme,
                             icon: Icons.logout,
                             iconColor: const Color(0xFFF44336), // Red
-                            title: 'Logout||logout'.tr(),
+                            title: AppLocalizations.of(context)!.logout,
                             onTap: () async {
                               final confirmed = await ConfirmationDialog.logout(context);
                               if (confirmed == true && context.mounted) {
-                                context.go('/login');
+                                // IMPORTANT: Actually sign out from Firebase/Google 
+                                await ref.read(authRepositoryProvider).logout();
+                                if (context.mounted) {
+                                  context.go('/login');
+                                }
                               }
                             },
                             hideChevron: true,
@@ -360,7 +371,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               const SizedBox(width: AppSpacing.lg),
               Expanded(
                 child: Text(
-                  'Appearance||appearance'.tr(),
+                  AppLocalizations.of(context)!.appearance,
                   style: AppTypography.bodyLarge.copyWith(
                     fontWeight: FontWeight.w600,
                     color: theme.colorScheme.onSurface,
@@ -382,21 +393,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 children: [
                   _buildCustomToggleBtn(
                     theme: theme,
-                    title: 'System||system'.tr(),
+                    title: AppLocalizations.of(context)!.system,
                     icon: Icons.brightness_auto,
                     isSelected: currentMode == ThemeMode.system,
                     onTap: () => ref.read(themeProvider.notifier).setTheme(ThemeMode.system),
                   ),
                   _buildCustomToggleBtn(
                     theme: theme,
-                    title: 'Light||light'.tr(),
+                    title: AppLocalizations.of(context)!.light,
                     icon: Icons.light_mode,
                     isSelected: currentMode == ThemeMode.light,
                     onTap: () => ref.read(themeProvider.notifier).setTheme(ThemeMode.light),
                   ),
                   _buildCustomToggleBtn(
                     theme: theme,
-                    title: 'Dark||dark'.tr(),
+                    title: AppLocalizations.of(context)!.dark,
                     icon: Icons.dark_mode,
                     isSelected: currentMode == ThemeMode.dark,
                     onTap: () => ref.read(themeProvider.notifier).setTheme(ThemeMode.dark),

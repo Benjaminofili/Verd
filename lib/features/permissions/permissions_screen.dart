@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -16,47 +17,47 @@ class _PermissionsScreenState extends State<PermissionsScreen> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
 
-  final List<_PermissionPageData> _pages = [
+  List<_PermissionPageData> get _pages => [
     _PermissionPageData(
       icon: Icons.camera_alt_outlined,
       color: const Color(0xFF4CAF50), // Green
-      title: 'Camera Access Required',
-      description: 'VERD needs access to your camera to scan crops and identify diseases.',
+      title: AppLocalizations.of(context)!.perm_camera_title,
+      description: AppLocalizations.of(context)!.perm_camera_desc,
       benefits: [
-        'Take photos of crops for instant analysis',
-        'Identify diseases in real-time',
-        'Save scan history with photos',
+        AppLocalizations.of(context)!.perm_camera_benefit1,
+        AppLocalizations.of(context)!.perm_camera_benefit2,
+        AppLocalizations.of(context)!.perm_camera_benefit3,
       ],
-      buttonText: 'Allow Camera Access',
-      permissionDetails: 'Your photos are processed securely and never shared without your permission.',
+      buttonText: AppLocalizations.of(context)!.perm_camera_btn,
+      permissionDetails: AppLocalizations.of(context)!.perm_camera_details,
       permissionStrategy: () => Permission.camera.request(),
     ),
     _PermissionPageData(
       icon: Icons.location_on_outlined,
       color: const Color(0xFF2196F3), // Blue
-      title: 'Location Access',
-      description: 'Enable location to get localized crop disease warnings and weather updates.',
+      title: AppLocalizations.of(context)!.perm_location_title,
+      description: AppLocalizations.of(context)!.perm_location_desc,
       benefits: [
-        'Get regional disease alerts',
-        'Receive weather-based recommendations',
-        'Find nearby agricultural resources',
+        AppLocalizations.of(context)!.perm_location_benefit1,
+        AppLocalizations.of(context)!.perm_location_benefit2,
+        AppLocalizations.of(context)!.perm_location_benefit3,
       ],
-      buttonText: 'Allow Location Access',
-      permissionDetails: 'Your location data is used only for providing relevant information and is never shared.',
+      buttonText: AppLocalizations.of(context)!.perm_location_btn,
+      permissionDetails: AppLocalizations.of(context)!.perm_location_details,
       permissionStrategy: () => Permission.location.request(),
     ),
     _PermissionPageData(
       icon: Icons.notifications_none_outlined,
       color: const Color(0xFFFF9800), // Orange
-      title: 'Stay Informed',
-      description: 'Get timely notifications about disease outbreaks, scan results, and important agricultural updates.',
+      title: AppLocalizations.of(context)!.perm_notif_title,
+      description: AppLocalizations.of(context)!.perm_notif_desc,
       benefits: [
-        'Instant scan completion alerts',
-        'Disease outbreak warnings',
-        'Weekly crop health reports',
+        AppLocalizations.of(context)!.perm_notif_benefit1,
+        AppLocalizations.of(context)!.perm_notif_benefit2,
+        AppLocalizations.of(context)!.perm_notif_benefit3,
       ],
-      buttonText: 'Enable Notifications',
-      permissionDetails: 'You can customize notification preferences anytime in settings.',
+      buttonText: AppLocalizations.of(context)!.perm_notif_btn,
+      permissionDetails: AppLocalizations.of(context)!.perm_notif_details,
       permissionStrategy: () => Permission.notification.request(),
       badgeScore: 3,
     ),
@@ -130,7 +131,7 @@ class _PermissionsScreenState extends State<PermissionsScreen> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      'Skip',
+                      AppLocalizations.of(context)!.skip,
                       style: AppTypography.body.copyWith(
                         color: AppColors.gray600,
                         fontWeight: FontWeight.w500,

@@ -1,3 +1,4 @@
+import 'package:verd/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:verd/core/constants/app_theme.dart';
@@ -5,7 +6,6 @@ import 'package:verd/features/home/home_screen.dart';
 import 'package:verd/features/profile/profile_screen.dart';
 import 'package:verd/features/scan/scan_screen.dart';
 import 'package:verd/shared/widgets/connectivity_banner.dart';
-import 'package:df_localization/df_localization.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -93,15 +93,15 @@ class _MainScreenState extends State<MainScreen> {
             tabs: [
               GButton(
                 icon: Icons.home_outlined,
-                text: 'home'.tr(),
+                text: AppLocalizations.of(context)?.home ?? 'Home',
               ),
               GButton(
                 icon: Icons.camera_alt_outlined,
-                text: 'scan'.tr(),
+                text: AppLocalizations.of(context)?.scan ?? 'Scan',
               ),
               GButton(
                 icon: Icons.person_outline,
-                text: 'profile'.tr(),
+                text: AppLocalizations.of(context)?.profile ?? 'Profile',
               ),
             ],
           ),

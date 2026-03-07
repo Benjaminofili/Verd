@@ -1,4 +1,9 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <!-- Override TFLite plugin minSdk requirement so app can run on API < 26 -->
+    <uses-sdk tools:overrideLibrary="org.tensorflow.tflite_flutter" />
+
     <!-- Permissions required for the VERD app -->
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
