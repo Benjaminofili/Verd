@@ -15,6 +15,14 @@ A Flutter mobile application that uses AI-powered image recognition to detect pl
 - **🔔 Push Notifications**: Get notified about weather alerts and crop updates via Firebase Cloud Messaging
 - **💬 Chat & Support**: Contact support team directly within the app
 
+## 📸 Screenshots
+
+| Splash Screen | Home Screen |
+|---|---|
+| ![Splash Screen](assets/images/splash.png) | ![Home Screen](assets/images/home.png) |
+
+*"Clarity for your crops" - Your smart agricultural companion*
+
 ## 🛠️ Tech Stack
 
 ### Frontend
