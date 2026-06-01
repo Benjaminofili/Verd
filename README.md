@@ -19,7 +19,7 @@ A Flutter mobile application that uses AI-powered image recognition to detect pl
 
 | Splash Screen | Home Dashboard |
 |---|---|
-| ![Splash Screen](assets/images/splash.jpg) | ![Home Dashboard](assets/images/verd_dashboard.jpg) |
+| ![Splash Screen](assets/verd_splash.jpg) | ![Home Dashboard](assets/verd_dashboard.jpg) |
 
 *"Clarity for your crops" - Your smart agricultural companion*
 
