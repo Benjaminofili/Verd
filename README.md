@@ -2,6 +2,9 @@
 
 A Flutter mobile app that detects plant and vegetable diseases from a photo. **Verd** helps farmers, gardeners, and agricultural enthusiasts identify crop health issues using their device's camera or gallery, with results that work even offline.
 
+> **AgriScan AI Hackathon Finalist**  
+> Verd was developed collaboratively as a team hackathon project. This repository is Benjamin Ofili's personal portfolio copy of the team's latest codebase.
+
 ## 📸 Screenshots
 
 | Splash Screen | Home Dashboard |
@@ -13,6 +16,7 @@ A Flutter mobile app that detects plant and vegetable diseases from a photo. **V
 ## ✨ Features
 
 - **Hybrid AI disease detection** — when online, the scan is uploaded and analyzed by Google's Gemini API for the most accurate read; when offline (or if the cloud call fails), it falls back to an on-device TensorFlow Lite model so scanning still works with no connection
+- **Grad-CAM explainability** — integrated alongside the on-device model to provide a visual explanation of model predictions
 - **Free trial** — guests get 3 scans (tracked locally) before being prompted to create an account
 - **Firebase Auth** — email/password and Google Sign-In
 - **Scan history** — results sync to Cloud Firestore for signed-in users; Hive handles local caching and offline-first storage
@@ -30,7 +34,7 @@ A Flutter mobile app that detects plant and vegetable diseases from a photo. **V
 | Routing | GoRouter |
 | Backend | Firebase — Auth, Firestore, Storage, Cloud Messaging, Analytics, Crashlytics, App Check |
 | Local storage | Hive, SharedPreferences |
-| AI / ML | Google Gemini API (online) + TensorFlow Lite via `tflite_flutter` (offline fallback) |
+| AI / ML | Google Gemini API (online) + TensorFlow Lite via `tflite_flutter` (offline fallback) + Grad-CAM explainability |
 
 ## How it works — AI routing
 
@@ -40,6 +44,20 @@ The scan flow is driven by a routing service in `lib/data/services/ai_service.da
 2. If offline, or the cloud call fails: the app falls back to the local TFLite model and returns an offline-compatible result payload.
 
 This keeps scanning functional in low-connectivity conditions, which matters for a field/agricultural use case.
+
+## Team & Role
+
+Verd was developed as a team project for the **AgriScan AI Hackathon**, where the project reached the finals.
+
+**Benjamin Ofili — Lead Mobile Developer**
+
+- Led the Flutter mobile application implementation and frontend work
+- Worked on backend and service integration for the mobile application
+- Integrated the pretrained machine-learning model into the Flutter app
+- Integrated Grad-CAM explainability into the mobile experience
+- Contributed to the technical implementation throughout the hackathon
+
+The underlying machine-learning model was **not trained by Benjamin**; his contribution focused on mobile development, service integration, and model integration.
 
 ## Project Structure
 
